@@ -1,31 +1,34 @@
-#The Infinite Potluck
+# The Infinite Potluck
 
-##Team Members 
+## Team Members 
 - Jan Miguel Marchan, github: JMMarchan
-
 - Yuk-Ming Lam, github: Aschente0
 
-##Web application description
+## Web application description
 
-Collaborative recipe creation
-- people are given a database with a list of ingredients, combinations of ingredients and techniques 
-- database is visualized in 2d plot by similarity 
-- focus on key combinations and pairings and cooking techniques, sorting by flavor and texture 
-- people review, comment, collaborate, remix on recipes 
+**The Infinite Potluck** is a collaborative recipe creation and sharing web application. Users can browse and contribute to a curated database of recipes. The recipes are visualized on a map where users can find new recipes, as well as filter based on ingredients, cuisines, and prepeation. Users can review and comment on recipes. They can also collaborate on recipes in real time.
 
-##Beta version key features 
+## Beta version key features 
 
-##Final version key features
+- Meals are displayed on a map
+- Users can sign up to add recipes, as well as comment and review them
+- Users vote on recipes, highly reviewed recipes are added to the map
+- Users can remix recipes and collaborate with others in real time
 
-##Technology Used
+## Final version additional features
 
-- next.js for server 
-- Highcharts for database visualization
-- Some recipe api
+- Moderaters can be assigned to review recipes before they are added to the map
+- Highly reviewed users can be awarded as Potluck Chefs where they have recipe creating lessons that people can join in on 
+- Filtering and sorting the recipes, with the visualization changing in real time
+- Collaboration is given more features such as recommended ingredients, cooking techniques.
+
+## Technology Used
+
+- next.js for server side rendering of web app
 - TogetherJS for collaboration
+- Edamam as a recipe database
 
-##Top 5 technical challenges
+## Top 5 technical challenges
  
-- 
-- 
-- 
+- Handling the visualization of a large database of recipes on a map
+- Real time collaboration for recipes
