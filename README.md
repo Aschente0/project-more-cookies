@@ -25,6 +25,7 @@
 ## Technology Used
 
 - next.js for server side rendering
+- MongoDB as the database for the recipes
 - TogetherJS for recipe collaboration
 - WebRTC for cooking video live streaming
 - Edamam as a recipe database and search API for filtering
