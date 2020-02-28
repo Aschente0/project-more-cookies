@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
 import Nav from '../components/nav';
+
 const Home = () => {
   const [date, setDate] = useState(null);
   useEffect(() => {
@@ -49,6 +50,18 @@ const Home = () => {
             <a className="card">
               <h3>Create Next App &rarr;</h3>
               <p>Was this tool helpful? Let us know how we can improve it!</p>
+            </a>
+          </Link>
+          <Link href="/broadcaster">
+            <a className="card">
+              <h3>Broadcaster &rarr;</h3>
+              <p>To stream</p>
+            </a>
+          </Link>
+          <Link href="/watcher">
+            <a className="card">
+              <h3>Watcher &rarr;</h3>
+              <p>To watch stream</p>
             </a>
           </Link>
         </div>
