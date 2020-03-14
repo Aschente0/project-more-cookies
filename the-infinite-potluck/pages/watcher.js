@@ -1,59 +1,71 @@
 import { Component } from 'react';
 import io from 'socket.io-client';
 import { render } from 'react-dom';
+import { Video } from '../components/Video';
+import Router from 'next/router';
+
+/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
 export default class Medium extends Component {
-    // constructor(props){
-    //     super(props);
+    constructor(props){
+        super(props);
 
-    //     this.state={
-    //         hello:''
-    //     }
-    // }
-
-    // componentDidMount(){
-    //     this.socket=io()
-    //     this.socket.emit('watcher');
-    //     this.socket.on('now', (data) => {
-    //         this.setState({
-    //             hello: data.message
-    //         })
-    //     })
-    // }
-    
-    // render(){
-    //     return(
-    //         <div>
-    //             <h1>{this.state.hello}</h1>
-    //             <p>test</p>
-    //         </div>
-            
-    //     )
-    // }
-
+        this.state={
+            hello:''
+        }
+    }
     componentDidMount(){
-        const peerConnection = new RTCPeerConnection();
+        this.socket=io()
 
-        this.socket = io();
-        this.video = document.querySelector('video');
+        let peerConnection;
+        let video = document.getElementById('video');
 
-        this.socket.on('offer', function (message){
+        this.socket.on('offer', (id, message) => {
+            console.log("8) WATCHER RECEIVES offer");
+            const peerConnection = new RTCPeerConnection();
             peerConnection.setRemoteDescription(message)
-            .then(() => peerConnection.createAnswer())
-            .then(sdp => peerConnection.setLocalDescription(sdp))
-            .then(function() {
-                this.socket.emit('answer', peerConnection.localDescription);
-            });
+                .then(() => peerConnection.createAnswer())
+                .then(sdp => peerConnection.setLocalDescription(sdp))
+                .then(() => {
+                    console.log("WATCHER EMITS answer");
+                    this.socket.emit('answer', id, peerConnection.localDescription);
+                });
+            peerConnection.ontrack = function(event) {
+                console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
+                document.getElementById('video').srcObject = event.streams[0];
+            }
         });
 
-        peerConnection.onaddstream = function (event) {
-            this.video.srcObject = event.stream;
-        };
-    }
+        this.socket.on('connect', () => {
+            this.socket.emit('watcher');
+        });
+        
+        this.socket.on('broadcaster', () => {
+            console.log("3) WATCHER RECEIVES broadcaster AND EMITS watcher");
+            this.socket.emit('watcher');
+        });
 
+        this.socket.on('dc', () => {
+            console.log("WATCHER RECEIVED DISCONNECT");
+            peerConnection.close();
+        });
+
+        Router.beforePopState(({url, as, options}) => {
+            console.log("ATTEMPTING TO DISCONNECT AS WATCHER");
+            if(as !== "/" || as !== "/other") {
+                window.location.href = as;
+                return false;
+            };
+        });
+
+    }
     render(){
         return(
-            <video playsInline autoPlay muted></video>
+            <div>
+                <video id="video" width="640" height="480" autoPlay >
+                </video>
+            </div>
+            
         )
     }
 }

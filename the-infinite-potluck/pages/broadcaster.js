@@ -1,67 +1,69 @@
 import { Component } from 'react';
 import io from 'socket.io-client';
 import { render } from 'react-dom';
+import Router from 'next/router';
 
-const Broadcaster = () => {
-// export default class Medium extends Component {
-    // constructor(props){
-    //     super(props);
+/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-    //     this.state={
-    //         hello:''
-    //     }
-    // }
-
-    // componentDidMount(){
-    //     this.socket=io()
-    //     this.socket.emit('broadcaster');
-    //     this.socket.on('now', (data) => {
-    //         this.setState({
-    //             hello: data.message
-    //         })
-    //     })
-    // }
-    
-    // render(){
-    //     return(
-    //         <div>
-    //             <h1>{this.state.hello}</h1>
-    //             <p>test</p>
-    //         </div>
-            
-    //     )
-    // }
-
-    // componentDidmount(){
+export default class Medium extends Component {
+    componentDidMount(){
+        this.socket=io();
+        
+        const peerConnections = {};
+        const video = document.getElementById('video');
         const peerConnection = new RTCPeerConnection();
+        navigator.mediaDevices.getUserMedia({video: true, audio: true})
+            .then((stream) => {
+                video.srcObject = stream;
+                console.log("1) BROADCASTER EMITS broadcaster");
+                this.socket.emit('broadcaster');
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
 
-        const socket = io();
+        this.socket.on('answer', function (id, description){
+            console.log("9) BROADCASTER RECEIVES answer, SETS RD");
+            peerConnections[id].setRemoteDescription(description);
+        });
 
-        navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true
-        })
-        .then(function(stream){
-            peerConnection.addStream(stream);
-
+        this.socket.on('watcher', id => {
+            console.log("5) BROADCASTER RECEIVES watcher");
+            const peerConnection = new RTCPeerConnection();
+            peerConnections[id] = peerConnection;
+            let stream = video.srcObject;
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
-            .then(function(){
-                socket.emit('offer', peerConnection.localDescription);
+            .then( () => {
+                console.log("6) BROADCASTER EMITS offer")
+                this.socket.emit('offer', id, peerConnection.localDescription);
             });
         });
-    // }
 
-    // render(){
+        this.socket.on('dc', id => {
+            console.log("BROADCASTER RECEIVED DISCONNECT");
+            if(peerConnections[id]){
+                peerConnections[id].close();
+                delete peerConnections[id];
+            }
+        });
+
+        Router.beforePopState(({url, as, options}) => {
+            console.log("ATTEMPTING TO DISCONNECT AS BROADCASTER");
+            if(as !== "/" || as !== "/other") {
+                window.location.href = as;
+                return false;
+            };
+        });
+    }    
+    render(){
         return(
             <div>
-                <h1>{socket.id}</h1>
-                <p> hello world </p>
-                <video playsInline autoPlay muted></video>
+                <video id="video" autoPlay>
+                </video>
             </div>
             
         )
-    // }
-
+    }
 }
-export default Broadcaster;
