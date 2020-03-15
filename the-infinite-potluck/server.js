@@ -11,37 +11,44 @@ const nextHandler = nextApp.getRequestHandler();
 
 let port = 3000;
 
-let broadcaster;
+let broadcasters = {};
 
 io.sockets.on('connection', socket => {
   socket.on('broadcaster', () =>{
-      broadcaster = socket.id;
+      let broadcaster = socket.id;
+      broadcasters[broadcaster] = broadcaster;
       console.log("2) SERVER RECEIVES broadcaster AND BROADCASTS broadcaster");
       socket.emit('broadcaster');
   });
 
   socket.on('watcher', () =>{
-    console.log("4) SERVER RECEIVES watcher AND EMITS watcher");
-    if(broadcaster){
+    console.log("4) SERVER RECEIVES watcher AND EMITS pickstream");
+    socket.emit('stream_choice', broadcasters);
+  });
+
+  socket.on('stream_chosen', (broadcaster) => {
+    console.log("7) SERVER RECEIVES REQUEST FOR CHOSEN STREAM, EMITS watcher");
+    if(broadcaster in broadcasters){
       socket.to(broadcaster).emit('watcher', socket.id);
     }
   });
 
   socket.on('offer', (id, message) => {
-    console.log("7) SERVER RECEIVES offer AND EMITS offer");
+    console.log("10) SERVER RECEIVES offer AND EMITS offer");
     socket.to(id).emit('offer', socket.id, message);
   });
 
   socket.on('answer', (id, message) => {
-    console.log("SERVER RECEIVES answer AND EMITS answer");
+    console.log("12) SERVER RECEIVES answer AND EMITS answer");
     socket.to(id).emit('answer', socket.id, message);
   });
 
   socket.on('disconnect', () => {
     console.log("SERVER RECEIVED DISCONNECT");
-    if(broadcaster){
+    Object.keys(broadcasters).forEach((broadcaster) => {
       socket.to(broadcaster).emit('dc', socket.id);
-    }
+    });
+    
   });
 });
 nextApp.prepare().then(() => {

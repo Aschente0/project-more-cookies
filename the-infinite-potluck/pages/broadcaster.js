@@ -5,7 +5,7 @@ import Router from 'next/router';
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-export default class Medium extends Component {
+export default class Broadcaster extends Component {
     componentDidMount(){
         this.socket=io();
         
@@ -23,12 +23,12 @@ export default class Medium extends Component {
             });
 
         this.socket.on('answer', function (id, description){
-            console.log("9) BROADCASTER RECEIVES answer, SETS RD");
+            console.log("13) BROADCASTER RECEIVES answer, SETS RD");
             peerConnections[id].setRemoteDescription(description);
         });
 
         this.socket.on('watcher', id => {
-            console.log("5) BROADCASTER RECEIVES watcher");
+            console.log("8) BROADCASTER RECEIVES watcher");
             const peerConnection = new RTCPeerConnection();
             peerConnections[id] = peerConnection;
             let stream = video.srcObject;
@@ -36,7 +36,7 @@ export default class Medium extends Component {
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
             .then( () => {
-                console.log("6) BROADCASTER EMITS offer")
+                console.log("9) BROADCASTER EMITS offer")
                 this.socket.emit('offer', id, peerConnection.localDescription);
             });
         });

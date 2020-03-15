@@ -93,109 +93,6 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./components/Portal.js":
-/*!******************************!*\
-  !*** ./components/Portal.js ***!
-  \******************************/
-/*! exports provided: Portal */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Portal", function() { return Portal; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-
-
-class Portal extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-  componentDidMount() {
-    this.element = document.querySelector(this.props.selector);
-  }
-
-  render() {
-    if (this.element === undefined) {
-      return null;
-    }
-
-    return react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.createPortal(this.props.children, this.element);
-  }
-
-}
-
-/***/ }),
-
-/***/ "./components/Video.js":
-/*!*****************************!*\
-  !*** ./components/Video.js ***!
-  \*****************************/
-/*! exports provided: Video */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Video", function() { return Video; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Portal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Portal */ "./components/Portal.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_2__);
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0__["createElement"];
-
-
-
-class Video extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
-  // WEBCAM VIDEO PLAYBACK; WORKING
-  // componentDidMount(){
-  //     const video = document.getElementById('videoElement');
-  //     console.log("VIDEO: " + video);
-  //     navigator.mediaDevices.getUserMedia({video: true, audio: true})
-  //         .then((stream) => {video.srcObject=stream})
-  //         .catch(function (err0r) {
-  //             console.log("Something went wrong!");
-  //         });
-  // }
-  componentDidMount() {
-    const video = document.getElementById('videoElement');
-    console.log("VIDEO: " + video);
-    const peerConnection = new RTCPeerConnection();
-    const socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2___default()();
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(stream => {
-      peerConnection.addStream(stream);
-      peerConnection.createOffer().then(sdp => peerConnection.setLocalDescription(sdp)).then(function () {
-        socket.emit('offer', peerConnection.localDescription);
-      });
-    }).catch(function (err0r) {
-      console.log("Something went wrong!");
-    });
-    socket.on('answer', function (message) {
-      peerConnection.setRemoteDescription(message);
-    });
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(stream => {
-      video.srcObject = stream;
-    }).catch(function (err0r) {
-      console.log("Something went wrong!");
-    });
-  }
-
-  render() {
-    return __jsx(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, __jsx("video", {
-      id: "videoElement",
-      autoPlay: true
-    }), __jsx("p", null, " video component "));
-  }
-
-}
-
-/***/ }),
-
 /***/ "./pages/watcher.js":
 /*!**************************!*\
   !*** ./pages/watcher.js ***!
@@ -205,30 +102,28 @@ class Video extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Medium; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Watcher; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "react-dom");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_Video__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Video */ "./components/Video.js");
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/router */ "next/router");
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_3__);
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
-
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-class Medium extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+class Watcher extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   constructor(props) {
     super(props);
     this.state = {
-      hello: ''
+      broadcasters: []
     };
   }
 
@@ -237,7 +132,7 @@ class Medium extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     let peerConnection;
     let video = document.getElementById('video');
     this.socket.on('offer', (id, message) => {
-      console.log("8) WATCHER RECEIVES offer");
+      console.log("11) WATCHER RECEIVES offer");
       const peerConnection = new RTCPeerConnection();
       peerConnection.setRemoteDescription(message).then(() => peerConnection.createAnswer()).then(sdp => peerConnection.setLocalDescription(sdp)).then(() => {
         console.log("WATCHER EMITS answer");
@@ -256,11 +151,26 @@ class Medium extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       console.log("3) WATCHER RECEIVES broadcaster AND EMITS watcher");
       this.socket.emit('watcher');
     });
+    this.socket.on('stream_choice', broadcasters => {
+      console.log("5) WATCHER CHOOSING STREAM");
+      console.log(Object.keys(broadcasters));
+      let pickstream = document.getElementById('pickstream');
+      Object.keys(broadcasters).forEach(broadcast => {
+        console.log("BROADCASTER: " + broadcast);
+        pickstream.innerHTML = pickstream.innerHTML + `<button id="${broadcast}">${broadcast}</button>`;
+      });
+      Object.keys(broadcasters).forEach(broadcast => {
+        document.getElementById(broadcast).addEventListener("click", () => {
+          console.log("6) WATCHER HAS CHOSEN A STREAM");
+          this.socket.emit('stream_chosen', broadcast);
+        });
+      });
+    });
     this.socket.on('dc', () => {
       console.log("WATCHER RECEIVED DISCONNECT");
       peerConnection.close();
     });
-    next_router__WEBPACK_IMPORTED_MODULE_4___default.a.beforePopState(({
+    next_router__WEBPACK_IMPORTED_MODULE_3___default.a.beforePopState(({
       url,
       as,
       options
@@ -282,6 +192,8 @@ class Medium extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       width: "640",
       height: "480",
       autoPlay: true
+    }), __jsx("div", {
+      id: "pickstream"
     }));
   }
 
