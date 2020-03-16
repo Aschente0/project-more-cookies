@@ -39,6 +39,11 @@ const Home = () => {
               <h3>Recipe Wiki &rarr;</h3>
             </a>
           </Link>
+          <Link href="/recipeCollab">
+            <a className="card">
+              <h3>Recipe Collab &rarr;</h3>
+            </a>
+          </Link>
           <Link href="/broadcaster">
             <a className="card">
               <h3>Broadcaster &rarr;</h3>

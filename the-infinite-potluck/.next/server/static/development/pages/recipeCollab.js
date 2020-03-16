@@ -88,21 +88,21 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./pages/broadcaster.js":
-/*!******************************!*\
-  !*** ./pages/broadcaster.js ***!
-  \******************************/
+/***/ "./pages/recipeCollab.js":
+/*!*******************************!*\
+  !*** ./pages/recipeCollab.js ***!
+  \*******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Broadcaster; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return recipeCollab; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
@@ -117,67 +117,25 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
-/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
-
-class Broadcaster extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+class recipeCollab extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   componentDidMount() {
-    this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_1___default()('/stream');
-    const peerConnections = {};
-    const video = document.getElementById('video');
-    const peerConnection = new RTCPeerConnection();
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(stream => {
-      video.srcObject = stream;
-      console.log("1) BROADCASTER EMITS broadcaster");
-      this.socket.emit('broadcaster');
-    }).catch(function (err) {
-      console.log(err);
+    this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_1___default()('/recipe');
+    const recipe = document.getElementById('recipe');
+    recipe.addEventListener("keyup", data => {
+      console.log("1) CLIENT EMITS message WITH DATA");
+      const text = recipe.value;
+      this.socket.emit('message', text);
     });
-    this.socket.on('answer', function (id, description) {
-      console.log("13) BROADCASTER RECEIVES answer, SETS RD");
-      peerConnections[id].setRemoteDescription(description);
-    });
-    this.socket.on('watcher', id => {
-      console.log("8) BROADCASTER RECEIVES watcher");
-      const peerConnection = new RTCPeerConnection();
-      peerConnections[id] = peerConnection;
-      let stream = video.srcObject;
-      stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-      peerConnection.createOffer().then(sdp => peerConnection.setLocalDescription(sdp)).then(() => {
-        console.log("9) BROADCASTER EMITS offer");
-        this.socket.emit('offer', id, peerConnection.localDescription);
-      });
-    });
-    this.socket.on('dc', id => {
-      console.log("BROADCASTER RECEIVED DISCONNECT");
-
-      if (peerConnections[id]) {
-        peerConnections[id].close();
-        delete peerConnections[id];
-      }
-    });
-    next_router__WEBPACK_IMPORTED_MODULE_3___default.a.beforePopState(({
-      url,
-      as,
-      options
-    }) => {
-      console.log("ATTEMPTING TO DISCONNECT AS BROADCASTER");
-
-      if (as !== "/" || as !== "/other") {
-        window.location.href = as;
-        return false;
-      }
-
-      ;
+    this.socket.on('message', data => {
+      recipe.value = data;
     });
   }
 
   render() {
-    return __jsx("div", null, __jsx("video", {
-      id: "video",
-      autoPlay: true
+    return __jsx("div", null, __jsx("textarea", {
+      id: "recipe",
+      rows: "10",
+      cols: "30"
     }));
   }
 
@@ -185,14 +143,14 @@ class Broadcaster extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 /***/ }),
 
-/***/ 6:
-/*!************************************!*\
-  !*** multi ./pages/broadcaster.js ***!
-  \************************************/
+/***/ 5:
+/*!*************************************!*\
+  !*** multi ./pages/recipeCollab.js ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\carlo_fqwuyel\Desktop\UofT\CSCC09\project\project-project-more-cookies\the-infinite-potluck\pages\broadcaster.js */"./pages/broadcaster.js");
+module.exports = __webpack_require__(/*! C:\Users\carlo_fqwuyel\Desktop\UofT\CSCC09\project\project-project-more-cookies\the-infinite-potluck\pages\recipeCollab.js */"./pages/recipeCollab.js");
 
 
 /***/ }),
@@ -242,4 +200,4 @@ module.exports = require("socket.io-client");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=broadcaster.js.map
+//# sourceMappingURL=recipeCollab.js.map

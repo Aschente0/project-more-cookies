@@ -13,8 +13,10 @@ let port = 3000;
 
 let broadcasters = {};
 
-const streamio = io.of('/stream');
+/* COMMUNICATION CHANNEL MULTIPLEXING */
 
+/* STREAMING COMMUNICATION CHANNEL */
+const streamio = io.of('/stream');
 streamio.on('connection', socket => {
   socket.on('broadcaster', () =>{
       let broadcaster = socket.id;
@@ -53,6 +55,17 @@ streamio.on('connection', socket => {
     
   });
 });
+
+/* RECIPE COLLABORATION COMMUNICATION CHANNEL */
+const recipeio = io.of('/recipe');
+recipeio.on('connection', socket => {
+  console.log("CONNECTION RECEIVED");
+  socket.on('message', (data) => {
+    console.log("2) SERVER RECEIVES message AND RELAYS");
+    socket.broadcast.emit('message', data);
+  });
+});
+
 nextApp.prepare().then(() => {
   app.get('*', (req, res) => {
     return nextHandler(req, res);
