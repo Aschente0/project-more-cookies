@@ -15,7 +15,7 @@ export default class Watcher extends Component {
     }
 
     componentDidMount(){
-        this.socket=io()
+        this.socket=io('/stream');
 
         let peerConnection;
         let video = document.getElementById('video');

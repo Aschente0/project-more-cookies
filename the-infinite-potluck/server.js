@@ -13,7 +13,9 @@ let port = 3000;
 
 let broadcasters = {};
 
-io.sockets.on('connection', socket => {
+const streamio = io.of('/stream');
+
+streamio.on('connection', socket => {
   socket.on('broadcaster', () =>{
       let broadcaster = socket.id;
       broadcasters[broadcaster] = broadcaster;

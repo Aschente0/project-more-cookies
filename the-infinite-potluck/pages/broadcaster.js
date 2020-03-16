@@ -7,7 +7,7 @@ import Router from 'next/router';
 
 export default class Broadcaster extends Component {
     componentDidMount(){
-        this.socket=io();
+        this.socket=io('/stream');
         
         const peerConnections = {};
         const video = document.getElementById('video');
