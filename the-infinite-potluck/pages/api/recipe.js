@@ -2,10 +2,50 @@
 const data = {
     "results": [
         {
+            "id": 492561,
+            "title": "Falafel Burgers with Feta Cucumber Sauce",
+            "readyInMinutes": 50,
+            "servings": 1,
+            "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
+            "imageUrls": [
+                "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"
+            ]
+        },
+        {
+            "id": 492562,
+            "title": "Falafel Burgers with Feta Cucumber Sauce",
+            "readyInMinutes": 50,
+            "servings": 2,
+            "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
+            "imageUrls": [
+                "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"
+            ]
+        },
+        {
+            "id": 492563,
+            "title": "Falafel Burgers with Feta Cucumber Sauce",
+            "readyInMinutes": 50,
+            "servings": 3,
+            "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
+            "imageUrls": [
+                "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"
+            ]
+        },
+        {
             "id": 492564,
             "title": "Falafel Burgers with Feta Cucumber Sauce",
-            "readInMinutes": 50,
-            "servings": 6,
+            "readyInMinutes": 50,
+            "servings": 4,
+            "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
+            "imageUrls": [
+                "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"
+            ]
+        },
+        {
+            "id": 492565,
+            "title": "Falafel Burgers with Feta Cucumber Sauce",
+            "readyInMinutes": 50,
+            "servings": 5,
             "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
             "imageUrls": [
                 "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"

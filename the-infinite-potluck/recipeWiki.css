@@ -1,4 +1,14 @@
 .recipe {
+    display: flex;
+    flex-direction: row;
+}
+
+.recipeInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.recipeImage {
     width: 10px;
     padding-left: 100px; 
 }
