@@ -11557,7 +11557,7 @@ var Home = function Home() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /*!**********************************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=C%3A%5CUsers%5Ccarlo_fqwuyel%5CDesktop%5CUofT%5CCSCC09%5Cproject%5Cproject-project-more-cookies%5Cthe-infinite-potluck%5Cpages%5Cindex.js ***!
   \**********************************************************************************************************************************************************************************************************/
@@ -11580,5 +11580,5 @@ module.exports = dll_493c66b1beb5bc1bd29d;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js"]]]);
+},[[2,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

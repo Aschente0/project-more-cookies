@@ -88,81 +88,40 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./pages/api/recipe.js":
-/*!*****************************!*\
-  !*** ./pages/api/recipe.js ***!
-  \*****************************/
+/***/ "./pages/api/date.js":
+/*!***************************!*\
+  !*** ./pages/api/date.js ***!
+  \***************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const data = {
-  "results": [{
-    "id": 492561,
-    "title": "Falafel Burgers with Feta Cucumber Sauce",
-    "readyInMinutes": 50,
-    "servings": 1,
-    "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
-    "imageUrls": ["falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"]
-  }, {
-    "id": 492562,
-    "title": "Falafel Burgers with Feta Cucumber Sauce",
-    "readyInMinutes": 50,
-    "servings": 2,
-    "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
-    "imageUrls": ["falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"]
-  }, {
-    "id": 492563,
-    "title": "Falafel Burgers with Feta Cucumber Sauce",
-    "readyInMinutes": 50,
-    "servings": 3,
-    "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
-    "imageUrls": ["falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"]
-  }, {
-    "id": 492564,
-    "title": "Falafel Burgers with Feta Cucumber Sauce",
-    "readyInMinutes": 50,
-    "servings": 4,
-    "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
-    "imageUrls": ["falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"]
-  }, {
-    "id": 492565,
-    "title": "Falafel Burgers with Feta Cucumber Sauce",
-    "readyInMinutes": 50,
-    "servings": 5,
-    "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
-    "imageUrls": ["falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"]
-  }],
-  "baseUri": "https://spoonacular.com/recipeImages/",
-  "offset": 0,
-  "number": 1,
-  "totalResults": 104,
-  "processingTimeMs": 189,
-  "expires": 1584659024049
-};
 /* harmony default export */ __webpack_exports__["default"] = ((req, res) => {
-  res.status(200).json(data); // res.status(200).json(req);
+  const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+  res.json({
+    date
+  });
 });
 
 /***/ }),
 
-/***/ 7:
-/*!***********************************!*\
-  !*** multi ./pages/api/recipe.js ***!
-  \***********************************/
+/***/ 5:
+/*!*********************************!*\
+  !*** multi ./pages/api/date.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\carlo_fqwuyel\Desktop\UofT\CSCC09\project\project-project-more-cookies\the-infinite-potluck\pages\api\recipe.js */"./pages/api/recipe.js");
+module.exports = __webpack_require__(/*! C:\Users\carlo_fqwuyel\Desktop\UofT\CSCC09\project\project-project-more-cookies\the-infinite-potluck\pages\api\date.js */"./pages/api/date.js");
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=recipe.js.map
+//# sourceMappingURL=date.js.map
