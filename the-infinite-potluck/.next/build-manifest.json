@@ -1,15 +1,13 @@
 {
   "devFiles": [
-    "static/development/dll/dll_9814ef4e1ae322003944.js",
-    "static/development/dll/dll_9814ef4e1ae322003944.js.map"
+    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js",
+    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js.map"
   ],
   "pages": {
-    "/": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
     "/_app": [
       "static/runtime/webpack.js",
+      "static/css/styles.chunk.css",
+      "static/chunks/styles.js",
       "static/runtime/main.js",
       "static/development/_buildManifest.js"
     ],
@@ -21,12 +19,10 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/index": [
+    "/recipeWiki": [
       "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
-    "/recipeCollab": [
-      "static/runtime/webpack.js",
+      "static/css/styles.chunk.css",
+      "static/chunks/styles.js",
       "static/runtime/main.js"
     ]
   }

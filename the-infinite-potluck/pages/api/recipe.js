@@ -1,3 +1,27 @@
+
+const data = {
+    "results": [
+        {
+            "id": 492564,
+            "title": "Falafel Burgers with Feta Cucumber Sauce",
+            "readInMinutes": 50,
+            "servings": 6,
+            "image": "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg",
+            "imageUrls": [
+                "falafel-burgers-with-feta-tzatziki-sauce-492564.jpg"
+            ]
+        }
+    ],
+    "baseUri": "https://spoonacular.com/recipeImages/",
+    "offset": 0,
+    "number": 1,
+    "totalResults": 104,
+    "processingTimeMs": 189,
+    "expires": 1584659024049
+}
+
+
 export default (req, res) => {
-    res.status(200).json([{ "recipe": "twice fried chicken" }, {"recipe": "tonkotsu ramen"}]);
+    res.status(200).json(data);
+    // res.status(200).json(req);
 };
