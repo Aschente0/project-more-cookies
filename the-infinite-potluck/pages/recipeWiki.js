@@ -2,11 +2,22 @@ import { Component } from 'react';
 import io from 'socket.io-client';
 import { render } from 'react-dom';
 import Router from 'next/router';
+import Auth from '../lib/Auth';
+import Nav from '../components/nav';
+
+
+const auth = new Auth();
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
 export default class RecipeWiki extends Component {
     componentDidMount(){
+        var user_data = localStorage.getItem('user_details');
+        var isLoggedIn = localStorage.getItem('isLoggedIn');
+        if(!isLoggedIn || !user_data){
+            window.location.replace('/');
+        }
+
         const search = document.getElementById('search');
         search.addEventListener('submit', function(event){
             event.preventDefault();
@@ -25,6 +36,8 @@ export default class RecipeWiki extends Component {
                         console.log(data);
                         // resulting array of data (recipes)
                         let recipe = document.getElementById('recipes');
+                        // clear existing recipes
+                        recipe.innerHTML = ``;
                         let baseUri = data.baseUri;
                         // populate recipe list with recipe overview cards
                         data.results.forEach(result => {
@@ -110,41 +123,44 @@ export default class RecipeWiki extends Component {
     }
     render(){
         return(
-            <div className="main">
-                <div className="body">
-                    <form id="search" className="search">
-                        <input type="text" id="data" name="data"/>
-                        <button id="search_btn">
-                            Search
-                        </button>
-                    </form>
-                    
-                    <div id="recipes" className="recipes">
+            <div>
+                <Nav />
+                <div className="main">
+                    <div className="body">
+                        <form id="search" className="search">
+                            <input type="text" id="data" name="data"/>
+                            <button id="search_btn">
+                                Search
+                            </button>
+                        </form>
+                        
+                        <div id="recipes" className="recipes">
+                        </div>
+
+                        <div id="indepthRecipe">
+                        </div>
+
                     </div>
 
-                    <div id="indepthRecipe">
-                    </div>
-
+                    <style jsx>{`
+                    .main{
+                        font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+                        'Arial', sans-serif;
+                        padding: 20px 20px 60px;
+                        max-width: 680px;
+                        margin: 0 auto;
+                    }
+                    .body {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .search {
+                        padding-bottom: 80px;
+                        align-items: center;
+                    }
+                    `}
+                    </style>
                 </div>
-
-                <style jsx>{`
-                .main{
-                    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
-                    'Arial', sans-serif;
-                    padding: 20px 20px 60px;
-                    max-width: 680px;
-                    margin: 0 auto;
-                }
-                .body {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .search {
-                    padding-bottom: 80px;
-                    align-items: center;
-                }
-                `}
-                </style>
             </div>
         )
     }

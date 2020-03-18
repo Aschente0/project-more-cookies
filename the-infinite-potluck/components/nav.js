@@ -1,31 +1,58 @@
 import React from 'react';
 import Link from 'next/link';
-const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT' },
-  { href: 'https://github.com/zeit/next.js', label: 'GitHub' },
-].map(link => {
-  link.key = `nav-link-${link.href}-${link.label}`;
-  return link;
-});
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
-      ))}
-    </ul>
-    <style jsx>{`
+import Auth from '../lib/Auth';
+
+const auth = new Auth();
+
+/** login handle from https://medium.com/techintoo/setting-up-auth0-with-react-nextjs-4346c303bb5b **/
+
+export default class Nav extends React.Component {
+
+  handleLogin(){
+    auth.login();
+  }
+
+  componentDidMount(){
+    let login = document.getElementById('login');
+    login.addEventListener("click", () => {
+      this.handleLogin();
+    });
+    var user_data = localStorage.getItem('user_details');
+    var isLoggedIn = localStorage.getItem('isLoggedIn');
+    if(isLoggedIn && user_data){
+        login.addEventListener("click", () => {
+          auth.logout();
+        });
+        login.innerHTML = 'Logout';
+    }
+}
+
+  render() {
+    return (
+      <nav>
+        <ul>
+          <li>
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+          </li>
+          <ul>
+            <li>
+              <Link href="/secure-page">
+                <a>Dashboard</a>
+              </Link>
+            </li>
+            <li>
+              <a id="login" >Login / Register</a>
+            </li>
+          </ul>
+        </ul>
+
+        <style jsx>{`
       :global(body) {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-          Helvetica, sans-serif;
+        font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+        'Arial', sans-serif;
       }
       nav {
         text-align: center;
@@ -47,6 +74,7 @@ const Nav = () => (
         font-size: 13px;
       }
     `}</style>
-  </nav>
-);
-export default Nav;
+      </nav>
+    )
+  }
+}
