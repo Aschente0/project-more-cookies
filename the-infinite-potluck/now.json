@@ -1,7 +1,11 @@
 {
     "version": 2,
-    "builds": [{ "src": "/pages/**.js", "use": "@now/node-server" }],
+    "builds": [
+        { "src": "server.js", "use": "@now/node-server" },
+        { "src": "package.json", "use": "@now/next"},
+        { "src": "pages/index.js", "use": "@now/node"}
+    ],
     "routes": [
-        { "src":"/", "dest": "/pages/index.js" }
+        { "src":"/", "dest": "pages/index.js" }
     ]
 }
