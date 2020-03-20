@@ -1,5 +1,5 @@
 export const AUTH_CONFIG = {
-    domain: 'dev-572t65wb.auth0.com',
-    clientId: 'ejzAT9J3L8jaSUG4Lo3jfe7iqX8idLIT',
-    callbackUrl: 'http://localhost:3000/auth/callback'
+    domain: 'raspy-silence-2106.auth0.com',
+    clientId: 'i-GA-tjehtVT70XBybge0A5_wKV0vcPX',
+    callbackUrl: 'https://dry-river-28713.herokuapp.com/auth/callback'
   }

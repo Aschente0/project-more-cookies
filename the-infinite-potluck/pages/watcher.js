@@ -29,9 +29,9 @@ export default class Watcher extends Component {
         let peerConnection;
         let video = document.getElementById('video');
 
-        this.socket.on('offer', (id, message) => {
+        this.socket.on('offer', (id, message, config) => {
             console.log("11) WATCHER RECEIVES offer");
-            const peerConnection = new RTCPeerConnection();
+            const peerConnection = new RTCPeerConnection(config);
             peerConnection.setRemoteDescription(message)
                 .then(() => peerConnection.createAnswer())
                 .then(sdp => peerConnection.setLocalDescription(sdp))
@@ -46,6 +46,7 @@ export default class Watcher extends Component {
         });
 
         this.socket.on('connect', () => {
+            console.log("watcher connected");
             this.socket.emit('watcher');
         });
         
@@ -71,6 +72,11 @@ export default class Watcher extends Component {
                     this.socket.emit('stream_chosen', broadcast);
                 });
             });
+        });
+
+        this.socket.on('candidate', (id, candidate) => {
+            peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
+            .catch(err => console.error(err));
         });
 
         this.socket.on('dc', () => {

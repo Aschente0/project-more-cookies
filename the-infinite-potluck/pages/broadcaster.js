@@ -10,7 +10,9 @@ import Auth from '../lib/Auth';
 
 const auth = new Auth();
 
+
 export default class Broadcaster extends Component {
+
     componentDidMount(){
         var user_data = localStorage.getItem('user_details');
         var isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -22,7 +24,7 @@ export default class Broadcaster extends Component {
         
         const peerConnections = {};
         const video = document.getElementById('video');
-        const peerConnection = new RTCPeerConnection();
+
         navigator.mediaDevices.getUserMedia({video: true, audio: true})
             .then((stream) => {
                 video.srcObject = stream;
@@ -38,9 +40,9 @@ export default class Broadcaster extends Component {
             peerConnections[id].setRemoteDescription(description);
         });
 
-        this.socket.on('watcher', id => {
+        this.socket.on('watcher', (id, config) => {
             console.log("8) BROADCASTER RECEIVES watcher");
-            const peerConnection = new RTCPeerConnection();
+            const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
             let stream = video.srcObject;
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
@@ -50,6 +52,10 @@ export default class Broadcaster extends Component {
                 console.log("9) BROADCASTER EMITS offer")
                 this.socket.emit('offer', id, peerConnection.localDescription);
             });
+        });
+
+        this.socket.on('candidate', (id, candidate) => {
+            peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
         });
 
         this.socket.on('dc', id => {
