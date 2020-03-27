@@ -52,9 +52,9 @@ export default class Broadcaster extends Component {
                 console.log("9) BROADCASTER EMITS offer")
                 this.socket.emit('offer', id, peerConnection.localDescription);
             });
-            peerConnection.onicecandidate = function(event) {
-                if (event.candidate) {
-                    socket.emit('candidate', id, event.candidate);
+            peerConnection.onicecandidate = iceEvent => {
+                if (iceEvent.candidate) {
+                    this.socket.emit('candidate', id, iceEvent.candidate);
                 }
             };
         });

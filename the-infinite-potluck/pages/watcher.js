@@ -43,9 +43,9 @@ export default class Watcher extends Component {
                 console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
                 document.getElementById('video').srcObject = event.streams[0];
             };
-            peerConnection.onicecandidate = function(event) {
-                if (event.candidate) {
-                    socket.emit('candidate', id, event.candidate);
+            peerConnection.onicecandidate = iceEvent => {
+                if (iceEvent.candidate) {
+                    this.socket.emit('candidate', id, iceEvent.candidate);
                 }
             };
         });
