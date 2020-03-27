@@ -80,6 +80,7 @@ export default class Watcher extends Component {
         });
 
         this.socket.on('candidate', (id, candidate) => {
+            console.log("CANDIDATE RECEIVED IN WATCHER: " + candidate);
             peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
             .catch(err => console.error(err));
         });

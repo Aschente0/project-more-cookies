@@ -54,12 +54,14 @@ export default class Broadcaster extends Component {
             });
             peerConnection.onicecandidate = iceEvent => {
                 if (iceEvent.candidate) {
+                    console.log("CANDIDATE EMIT FROM BROADCASTER: " + iceEvent.candidate);
                     this.socket.emit('candidate', id, iceEvent.candidate);
                 }
             };
         });
 
         this.socket.on('candidate', (id, candidate) => {
+            console.log("CANDIDATE RECEIVED IN BROADCASTER: " + candidate);
             peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
         });
 
