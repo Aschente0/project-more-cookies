@@ -31,7 +31,7 @@ export default class Watcher extends Component {
 
         this.socket.on('offer', (id, message, config) => {
             console.log("11) WATCHER RECEIVES offer");
-            const peerConnection = new RTCPeerConnection(config);
+            peerConnection = new RTCPeerConnection(config);
             peerConnection.setRemoteDescription(message)
                 .then(() => peerConnection.createAnswer())
                 .then(sdp => peerConnection.setLocalDescription(sdp))
