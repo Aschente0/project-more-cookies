@@ -348,9 +348,9 @@ var Auth = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_CONFIG", function() { return AUTH_CONFIG; });
 var AUTH_CONFIG = {
-  domain: 'raspy-silence-2106.auth0.com',
-  clientId: 'i-GA-tjehtVT70XBybge0A5_wKV0vcPX',
-  callbackUrl: 'https://aqueous-coast-40978.herokuapp.com/auth/callback'
+  domain: 'dev-572t65wb.auth0.com',
+  clientId: 'ejzAT9J3L8jaSUG4Lo3jfe7iqX8idLIT',
+  callbackUrl: 'http://localhost:3000/redirect'
 };
 
 /***/ }),
@@ -42634,18 +42634,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 /***/ }),
 
-/***/ 8:
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ 9:
+/***/ 7:
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2FrecipeWiki&absolutePagePath=C%3A%5CUsers%5Ccarlo_fqwuyel%5CDesktop%5CUofT%5CCSCC09%5Cproject%5Cproject-project-more-cookies%5Cthe-infinite-potluck%5Cpages%5CrecipeWiki.js ***!
   \*************************************************************************************************************************************************************************************************************************/
@@ -42654,6 +42643,17 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2FrecipeWiki&absolutePagePath=C%3A%5CUsers%5Ccarlo_fqwuyel%5CDesktop%5CUofT%5CCSCC09%5Cproject%5Cproject-project-more-cookies%5Cthe-infinite-potluck%5Cpages%5CrecipeWiki.js! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2FrecipeWiki&absolutePagePath=C%3A%5CUsers%5Ccarlo_fqwuyel%5CDesktop%5CUofT%5CCSCC09%5Cproject%5Cproject-project-more-cookies%5Cthe-infinite-potluck%5Cpages%5CrecipeWiki.js!./");
 
+
+/***/ }),
+
+/***/ 8:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ }),
 
@@ -42668,5 +42668,5 @@ module.exports = dll_09868c70a13dd8a10f3b;
 
 /***/ })
 
-},[[9,"static/runtime/webpack.js"]]]);
+},[[7,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=recipeWiki.js.map

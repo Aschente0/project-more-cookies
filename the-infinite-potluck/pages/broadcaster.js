@@ -1,8 +1,6 @@
 import { Component } from 'react';
 import io from 'socket.io-client';
-import { render } from 'react-dom';
 import Router from 'next/router';
-import Auth from '../lib/Auth';
 import secureTemplate from '../static/secure-template';
 
 

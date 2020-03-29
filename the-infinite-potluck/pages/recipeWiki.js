@@ -1,13 +1,6 @@
 import { Component } from 'react';
-import io from 'socket.io-client';
-import { render } from 'react-dom';
-import Router from 'next/router';
-import Auth from '../lib/Auth';
-import Nav from '../components/nav';
 import secureTemplate from '../static/secure-template';
 
-
-const auth = new Auth();
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
