@@ -3,22 +3,16 @@ import io from 'socket.io-client';
 import { render } from 'react-dom';
 import Router from 'next/router';
 import Auth from '../lib/Auth';
+import secureTemplate from '../static/secure-template';
 
 
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-const auth = new Auth();
-
-
-export default class Broadcaster extends Component {
+class Broadcaster extends Component {
 
     componentDidMount(){
-        var user_data = localStorage.getItem('user_details');
-        var isLoggedIn = localStorage.getItem('isLoggedIn');
-        if(!isLoggedIn || !user_data){
-            window.location.replace('/');
-        }
+
 
         this.socket=io('/stream');
         
@@ -91,3 +85,4 @@ export default class Broadcaster extends Component {
         )
     }
 }
+export default secureTemplate(Broadcaster);

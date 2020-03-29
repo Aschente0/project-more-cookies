@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
 import Nav from '../components/nav';
+import PropTypes from 'prop-types';
+import { getToken } from '../static/auth.js';
+import template from '../static/template';
 
-const Home = () => {
+const Home = ({ isLoggedIn }) => {
   const [date, setDate] = useState(null);
   useEffect(() => {
     async function getDate() {
@@ -16,13 +19,8 @@ const Home = () => {
   return (
     <div>
       <Head title="Home" />
-      <Nav />
       <div className="hero">
         <h1 className="title">The Infinite Potluck</h1>
-        <p className="description">
-          To get started, edit the <code>pages/index.js</code> or{' '}
-          <code>pages/api/date.js</code> files, then save to reload.
-        </p>
         <p className="row date">
           The date is:&nbsp;{' '}
           {date ? (
@@ -137,4 +135,7 @@ const Home = () => {
     </div>
   );
 };
-export default Home;
+Home.propTypes = {
+  isLoggedIn: PropTypes.bool
+}
+export default template(Home);

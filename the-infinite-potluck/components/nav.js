@@ -1,54 +1,15 @@
-import React from 'react';
 import Link from 'next/link';
-import Auth from '../lib/Auth';
+import PropTypes from 'prop-types';
 
-const auth = new Auth();
-
-/** login handle from https://medium.com/techintoo/setting-up-auth0-with-react-nextjs-4346c303bb5b **/
-
-export default class Nav extends React.Component {
-
-  handleLogin(){
-    auth.login();
-  }
-
-  componentDidMount(){
-    let login = document.getElementById('login');
-    login.addEventListener("click", () => {
-      this.handleLogin();
-    });
-    var user_data = localStorage.getItem('user_details');
-    var isLoggedIn = localStorage.getItem('isLoggedIn');
-    if(isLoggedIn && user_data){
-        login.addEventListener("click", () => {
-          auth.logout();
-        });
-        login.innerHTML = 'Logout';
-    }
-}
-
-  render() {
-    return (
-      <nav>
-        <ul>
-          <li>
-            <Link href="/">
-              <a>Home</a>
-            </Link>
-          </li>
-          <ul>
-            <li>
-              <Link href="/secure-page">
-                <a>Dashboard</a>
-              </Link>
-            </li>
-            <li>
-              <a id="login" >Login / Register</a>
-            </li>
-          </ul>
-        </ul>
-
-        <style jsx>{`
+const Nav = ({ isLoggedIn }) => (
+  <div>
+    <nav>
+      <ul>
+        <li><Link href="/"><a>Home</a></Link></li>
+        { isLoggedIn ? ( <li><Link href="/profile"><a>Profile</a></Link></li> ) : ( <li><Link href="/login"><a>Login</a></Link></li> ) }
+        { isLoggedIn ? ( <li><Link href="/logout"><a>Logout</a></Link></li> ) : ( '' ) }
+      </ul>
+      <style jsx>{`
       :global(body) {
         margin: 0;
         font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
@@ -74,7 +35,12 @@ export default class Nav extends React.Component {
         font-size: 13px;
       }
     `}</style>
-      </nav>
-    )
-  }
-}
+    </nav>
+  </div>
+)
+
+Nav.propTypes = {
+  isLoggedIn: PropTypes.bool
+};
+
+export default Nav;

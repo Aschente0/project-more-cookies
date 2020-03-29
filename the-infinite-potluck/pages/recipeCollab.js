@@ -2,9 +2,10 @@ import { Component } from 'react';
 import io from 'socket.io-client';
 import { render } from 'react-dom';
 import Router from 'next/router';
+import secureTemplate from '../static/secure-template';
 
 
-export default class recipeCollab extends Component {
+class recipeCollab extends Component {
     componentDidMount(){
         this.socket=io('/recipe');
         
@@ -31,3 +32,4 @@ export default class recipeCollab extends Component {
         )
     }
 }
+export default secureTemplate(recipeCollab);
