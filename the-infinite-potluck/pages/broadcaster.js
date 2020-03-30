@@ -14,12 +14,6 @@ const auth = new Auth();
 export default class Broadcaster extends Component {
 
     componentDidMount(){
-        var user_data = localStorage.getItem('user_details');
-        var isLoggedIn = localStorage.getItem('isLoggedIn');
-        if(!isLoggedIn || !user_data){
-            window.location.replace('/');
-        }
-
         this.socket=io('/stream');
         
         const peerConnections = {};

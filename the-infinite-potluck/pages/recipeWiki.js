@@ -12,12 +12,6 @@ const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
 export default class RecipeWiki extends Component {
     componentDidMount(){
-        var user_data = localStorage.getItem('user_details');
-        var isLoggedIn = localStorage.getItem('isLoggedIn');
-        if(!isLoggedIn || !user_data){
-            window.location.replace('/');
-        }
-
         const search = document.getElementById('search');
         search.addEventListener('submit', function(event){
             event.preventDefault();
