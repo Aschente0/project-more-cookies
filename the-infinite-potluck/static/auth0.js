@@ -14,7 +14,7 @@ function webAuth(clientID, domain) {
 function login() {
   const options = {
     responseType: 'id_token',
-    redirectUri: 'https://aqueous-coast-40978.herokuapp.com//redirect',
+    redirectUri: 'http://localhost:3000/redirect',
     scope: 'openid profile email'
   };
   
