@@ -1,11 +1,12 @@
 import { Component } from 'react';
 import io from 'socket.io-client';
 import Router from 'next/router';
-
+import secureTemplate from '../static/secure-template';
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-export default class Watcher extends Component {
+
+class Watcher extends Component {
     constructor(props){
         super(props);
 
@@ -15,6 +16,7 @@ export default class Watcher extends Component {
     }
 
     componentDidMount(){
+
         this.socket=io('/stream');
 
         let peerConnection;
@@ -102,3 +104,4 @@ export default class Watcher extends Component {
         )
     }
 }
+export default secureTemplate(Watcher);

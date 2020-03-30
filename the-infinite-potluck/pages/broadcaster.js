@@ -1,14 +1,17 @@
 import { Component } from 'react';
 import io from 'socket.io-client';
 import Router from 'next/router';
+import secureTemplate from '../static/secure-template';
+
+
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-
-
-export default class Broadcaster extends Component {
+class Broadcaster extends Component {
 
     componentDidMount(){
+
+
         this.socket=io('/stream');
         
         const peerConnections = {};
@@ -80,3 +83,4 @@ export default class Broadcaster extends Component {
         )
     }
 }
+export default secureTemplate(Broadcaster);
