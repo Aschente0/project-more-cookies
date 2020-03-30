@@ -1,8 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Auth from '../lib/Auth';
-
-const auth = new Auth();
 
 /** login handle from https://medium.com/techintoo/setting-up-auth0-with-react-nextjs-4346c303bb5b **/
 

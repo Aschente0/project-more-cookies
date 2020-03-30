@@ -5,8 +5,6 @@ import Router from 'next/router';
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
-const auth = new Auth();
-
 export default class Watcher extends Component {
     constructor(props){
         super(props);
