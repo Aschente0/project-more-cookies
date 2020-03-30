@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
+import Nav from '../components/nav';
 import PropTypes from 'prop-types';
+import { getToken } from '../static/auth.js';
 import template from '../static/template';
 
 const Home = ({ isLoggedIn }) => {
