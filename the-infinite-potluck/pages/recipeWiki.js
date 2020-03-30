@@ -1,11 +1,9 @@
 import { Component } from 'react';
-import Nav from '../components/nav';
-
-
+import secureTemplate from '../static/secure-template';
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
-export default class RecipeWiki extends Component {
+class RecipeWiki extends Component {
     componentDidMount(){
         const search = document.getElementById('search');
         search.addEventListener('submit', function(event){
@@ -113,7 +111,6 @@ export default class RecipeWiki extends Component {
     render(){
         return(
             <div>
-                <Nav />
                 <div className="main">
                     <div className="body">
                         <form id="search" className="search">
@@ -154,3 +151,4 @@ export default class RecipeWiki extends Component {
         )
     }
 }
+export default secureTemplate(RecipeWiki);
