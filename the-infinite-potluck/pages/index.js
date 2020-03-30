@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Head from '../components/head';
-import Nav from '../components/nav';
+import PropTypes from 'prop-types';
+import template from '../static/template';
 
 const Home = () => {
   const [date, setDate] = useState(null);
