@@ -16,7 +16,6 @@ const Home = () => {
   return (
     <div>
       <Head title="Home" />
-      <Nav />
       <div className="hero">
         <h1 className="title">The Infinite Potluck</h1>
         <p className="description">
@@ -137,4 +136,8 @@ const Home = () => {
     </div>
   );
 };
-export default Home;
+Home.propTypes = {
+  isLoggedIn: PropTypes.bool
+}
+
+export default template(Home);
