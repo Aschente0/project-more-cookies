@@ -16,7 +16,7 @@ export default class extends React.Component {
           saveToken(result.idToken, result.accessToken);
           Router.push('/');
         } else {
-          Router.push('/')
+          Router.push('/');
         }
       });
     })
