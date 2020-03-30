@@ -4,15 +4,19 @@ import { render } from 'react-dom';
 import Router from 'next/router';
 import Auth from '../lib/Auth';
 import Nav from '../components/nav';
-import secureTemplate from '../static/secure-template';
 
 
 const auth = new Auth();
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
-class RecipeWiki extends Component {
+export default class RecipeWiki extends Component {
     componentDidMount(){
+        var user_data = localStorage.getItem('user_details');
+        var isLoggedIn = localStorage.getItem('isLoggedIn');
+        if(!isLoggedIn || !user_data){
+            window.location.replace('/');
+        }
 
         const search = document.getElementById('search');
         search.addEventListener('submit', function(event){
@@ -120,6 +124,7 @@ class RecipeWiki extends Component {
     render(){
         return(
             <div>
+                <Nav />
                 <div className="main">
                     <div className="body">
                         <form id="search" className="search">
@@ -141,7 +146,7 @@ class RecipeWiki extends Component {
                     .main{
                         font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
                         'Arial', sans-serif;
-                        padding: 20px 20px 30px;
+                        padding: 20px 20px 60px;
                         max-width: 680px;
                         margin: 0 auto;
                     }
@@ -150,7 +155,7 @@ class RecipeWiki extends Component {
                         flex-direction: column;
                     }
                     .search {
-                        padding-bottom: 20px;
+                        padding-bottom: 80px;
                         align-items: center;
                     }
                     `}
@@ -160,4 +165,3 @@ class RecipeWiki extends Component {
         )
     }
 }
-export default secureTemplate(RecipeWiki);

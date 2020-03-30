@@ -1,16 +1,17 @@
 {
   "devFiles": [
-    "static/development/dll/dll_92562a1a8ed80f9536f9.js",
-    "static/development/dll/dll_92562a1a8ed80f9536f9.js.map"
-  ],
-  "lowPriorityFiles": [
-    "static/development/_buildManifest.js",
-    "static/development/_ssgManifest.js"
+    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js",
+    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js.map"
   ],
   "pages": {
-    "/_app": [
+    "/": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
+    ],
+    "/_app": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js",
+      "static/development/_buildManifest.js"
     ],
     "/_error": [
       "static/runtime/webpack.js",
@@ -20,7 +21,27 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
+    "/auth/callback": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/broadcaster": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/index": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/next/dist/pages/_error": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
     "/recipeWiki": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/watcher": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]
