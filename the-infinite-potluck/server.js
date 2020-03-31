@@ -60,6 +60,16 @@ streamio.on('connection', socket => {
     socket.to(id).emit('candidate', socket.id, message);
   });
 
+  socket.on('stream_popup', (id, message) => {
+    console.log("SERVER EMITS stream_popup");
+    socket.to(id).emit('stream_popup', message);
+  });
+
+  socket.on('message_synth', (message) => {
+    console.log("SERVER RECEIVES message_synth");
+    socket.broadcast.emit('message_synth', socket.id, message);
+  });
+
   socket.on('disconnect', () => {
     console.log("SERVER RECEIVED DISCONNECT");
     Object.keys(broadcasters).forEach((broadcaster) => {

@@ -22,6 +22,33 @@ class Watcher extends Component {
         let peerConnection;
         let video = document.getElementById('video');
 
+        //broadcast the watcher is connected to
+        let currBroadcast;
+
+        // Stream pop-up messaging variables
+        const messageBox = document.getElementById('send_btn');
+        const data = document.getElementById('data');
+        let speech = new SpeechSynthesisUtterance();
+
+        // on message submission, emit steam_popup signal
+        messageBox.addEventListener("click", event => {
+            let message = data.value;
+            console.log(message);
+            //params: signal, broadcast id to emit to, message
+            this.socket.emit('stream_popup', currBroadcast, message);
+            console.log("WATCHER EMITS stream_popup");
+        });
+
+        //signal to synthesis message
+        this.socket.on('message_synth', (id, message) => {
+            console.log("WATCHER RECEIVES message_synth");
+            console.log("ID: " + id + " currBroadcast: " + currBroadcast);
+            if (id == currBroadcast) {
+                speech.text = message;
+                window.speechSynthesis.speak(speech);
+            }
+        });
+
         this.socket.on('offer', (id, message, config) => {
             console.log("11) WATCHER RECEIVES offer");
             peerConnection = new RTCPeerConnection(config);
@@ -67,6 +94,7 @@ class Watcher extends Component {
             Object.keys(broadcasters).forEach( (broadcast) => {
                 document.getElementById(broadcast).addEventListener("click", () => {
                     console.log("6) WATCHER HAS CHOSEN A STREAM");
+                    currBroadcast = broadcast;
                     this.socket.emit('stream_chosen', broadcast);
                 });
             });
@@ -88,7 +116,7 @@ class Watcher extends Component {
             if(as !== "/" || as !== "/other") {
                 window.location.href = as;
                 return false;
-            };
+            }
         });
 
     }
@@ -97,6 +125,12 @@ class Watcher extends Component {
             <div>
                 <video id="video" width="640" height="480" autoPlay >
                 </video>
+                <form id="msg" className="search">
+                    <textarea type="text" id="data" name="data"/>
+                    <button type="button" id="send_btn">
+                           Send
+                    </button>
+                </form>
                 <div id="pickstream">
                 </div>
             </div>

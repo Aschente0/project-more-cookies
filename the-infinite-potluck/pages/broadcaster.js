@@ -2,24 +2,67 @@ import { Component } from 'react';
 import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
+import { CpsContext } from 'twilio/lib/rest/preview/trusted_comms/cps';
 
 
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
+
 class Broadcaster extends Component {
-
     componentDidMount(){
-
-
         this.socket=io('/stream');
         
         const peerConnections = {};
         const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas').getContext('2d');
+        const messageBox = document.getElementById('send_btn');
+        const data = document.getElementById('data');
+        let messages = [];
+        let message = "";
+        let pause = false;
+        let speech = new SpeechSynthesisUtterance();
+
+        const drawToCanvas = () => {
+            canvas.drawImage(video, 0, 0, 640, 480);
+            canvas.font = "20px Comic Sans MS";
+            canvas.fillStyle = "blue";
+            // draw message for 5 seconds, pause for 2 seconds before drawing new message
+            if((messages.length) && (message == "") && !pause) {
+                //first grab message from queue of messages received
+                message = messages.shift();
+                //emit signal with message for watches to synthesize text
+                this.socket.emit('message_synth', message);
+                console.log("BROADCASTER EMITS message_synth");
+                //ready the local text synthesis for broadcaster to hear
+                speech.text = message;
+                window.speechSynthesis.speak(speech);
+                //logic to space out the message synthesis frequency for naturality
+                speech.onend = e => {
+                    setTimeout(function() {
+                        pause = true;
+                        message = "";
+                    }, 2000);
+                    setTimeout(function() {
+                        pause = false;
+                    }, 5000);
+                };
+            }
+            canvas.fillText(message, 10, 50);
+            requestAnimationFrame(drawToCanvas);
+        }
+
+        //signal for stream pop-up
+        this.socket.on('stream_popup', message => {
+            console.log("BROADCASTER RECEIVED stream_popup");
+            messages.push(message);
+            console.log(messages);
+        });
 
         navigator.mediaDevices.getUserMedia({video: true, audio: true})
             .then((stream) => {
                 video.srcObject = stream;
+                drawToCanvas();
                 console.log("1) BROADCASTER EMITS broadcaster");
                 this.socket.emit('broadcaster');
             })
@@ -36,7 +79,8 @@ class Broadcaster extends Component {
             console.log("8) BROADCASTER RECEIVES watcher");
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
-            let stream = video.srcObject;
+            // let stream = video.srcObject;
+            let stream = document.getElementById('canvas').captureStream();
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
@@ -70,14 +114,27 @@ class Broadcaster extends Component {
             if(as !== "/" || as !== "/other") {
                 window.location.href = as;
                 return false;
-            };
+            }
         });
+
+
+
     }    
     render(){
         return(
             <div>
                 <video id="video" autoPlay>
                 </video>
+                <canvas width="640" height="480" id="canvas" autoPlay>
+                </canvas>
+                <form id="msg" className="search">
+                    <textarea type="text" id="data" name="data"/>
+                    <button type="button" id="send_btn">
+                           Send
+                    </button>
+                </form>
+                <canvas width="640" height="480" id="canvas2" autoPlay>
+                </canvas>
             </div>
             
         )
