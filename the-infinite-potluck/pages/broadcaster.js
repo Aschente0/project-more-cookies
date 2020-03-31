@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
 import { CpsContext } from 'twilio/lib/rest/preview/trusted_comms/cps';
+import Video from 'twilio/lib/rest/Video';
 
 
 
@@ -14,10 +15,12 @@ class Broadcaster extends Component {
         this.socket=io('/stream');
         
         const peerConnections = {};
-        const video = document.getElementById('video');
+        // const video = document.getElementById('video');
         const canvas = document.getElementById('canvas').getContext('2d');
         const messageBox = document.getElementById('send_btn');
         const data = document.getElementById('data');
+        const video = document.createElement('video');
+        video.setAttribute('autoplay', true);
         let messages = [];
         let message = "";
         let pause = false;
@@ -126,8 +129,6 @@ class Broadcaster extends Component {
     render(){
         return(
             <div>
-                <video id="video" autoPlay>
-                </video>
                 <canvas width="640" height="480" id="canvas" autoPlay>
                 </canvas>
                 <form id="msg" className="search">
