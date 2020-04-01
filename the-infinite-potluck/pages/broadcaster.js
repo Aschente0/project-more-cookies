@@ -83,26 +83,26 @@ class Broadcaster extends Component {
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
             // let stream = video.srcObject;
-            let finalStream = new MediaStream();
             let stream = document.getElementById('canvas').captureStream();
             stream.getVideoTracks().forEach((track) => {
                 console.log("ADDING VIDEO TRACK: " + track);
                 finalStream.addTrack(track);
             });
-            navigator.mediaDevices.getUserMedia({audio: true})
-                .then((astream) => {
-                    astream.getAudioTracks().forEach((track) => {
-                        console.log("ADDING AUDIO TRACK: " + track);
-                        finalStream.addTrack(track);
-                    });
-                });
-            finalStream.getTracks().forEach(track => peerConnection.addTrack(track, finalStream));
+            let astream = navigator.mediaDevices.getUserMedia({audio: true});
+            let aTrack = astream.getTracks().filter((track) => {
+                return track.kind === 'audio';
+            })[0];
+            stream.addTrack(aTrack);
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
             .then( () => {
                 console.log("9) BROADCASTER EMITS offer")
                 this.socket.emit('offer', id, peerConnection.localDescription);
             });
+
+
+
             peerConnection.onicecandidate = iceEvent => {
                 if (iceEvent.candidate) {
                     console.log("CANDIDATE EMIT FROM BROADCASTER: " + iceEvent.candidate);
