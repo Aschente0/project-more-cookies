@@ -20,6 +20,7 @@ class Broadcaster extends Component {
         const messageBox = document.getElementById('send_btn');
         const data = document.getElementById('data');
         const video = document.createElement('video');
+        const audio = document.createElement('audio');
         video.setAttribute('autoplay', true);
         let messages = [];
         let message = "";
@@ -62,7 +63,7 @@ class Broadcaster extends Component {
             console.log(messages);
         });
 
-        navigator.mediaDevices.getUserMedia({video: true, audio: true})
+        navigator.mediaDevices.getUserMedia({video: true})
             .then((stream) => {
                 video.srcObject = stream;
                 drawToCanvas();
@@ -84,28 +85,30 @@ class Broadcaster extends Component {
             peerConnections[id] = peerConnection;
             // let stream = video.srcObject;
             let stream = document.getElementById('canvas').captureStream();
+            navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                .then(aStream => {
+                    aStream.getAudioTracks().forEach( (track) => {
+                        console.log("combining audio track");
+                        stream.addTrack(track);
 
-            let astream = navigator.mediaDevices.getUserMedia({audio: true});
-            let aTrack = astream.getTracks().filter((track) => {
-                return track.kind === 'audio';
-            })[0];
-            stream.addTrack(aTrack);
-            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-            peerConnection.createOffer()
-            .then(sdp => peerConnection.setLocalDescription(sdp))
-            .then( () => {
-                console.log("9) BROADCASTER EMITS offer")
-                this.socket.emit('offer', id, peerConnection.localDescription);
-            });
-
-
-
-            peerConnection.onicecandidate = iceEvent => {
-                if (iceEvent.candidate) {
-                    console.log("CANDIDATE EMIT FROM BROADCASTER: " + iceEvent.candidate);
-                    this.socket.emit('candidate', id, iceEvent.candidate);
-                }
-            };
+                        stream.getTracks().forEach(track => {
+                            console.log("ADDING TRACK: " + track);
+                            peerConnection.addTrack(track, stream);
+                        });
+                        peerConnection.createOffer()
+                        .then(sdp => peerConnection.setLocalDescription(sdp))
+                        .then( () => {
+                            console.log("9) BROADCASTER EMITS offer")
+                            this.socket.emit('offer', id, peerConnection.localDescription);
+                        });
+                        peerConnection.onicecandidate = iceEvent => {
+                            if (iceEvent.candidate) {
+                                console.log("CANDIDATE EMIT FROM BROADCASTER: " + iceEvent.candidate);
+                                this.socket.emit('candidate', id, iceEvent.candidate);
+                            }
+                        };
+                    });
+                });
         });
 
         this.socket.on('candidate', (id, candidate) => {

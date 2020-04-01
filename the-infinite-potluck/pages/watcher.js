@@ -126,7 +126,7 @@ class Watcher extends Component {
             <div>
                 <video id="video" width="640" height="480" autoPlay >
                 </video>
-                <audio id="audio"></audio>
+                <audio id="audio" autoPlay></audio>
                 <form id="msg" className="search">
                     <textarea type="text" id="data" name="data"/>
                     <button type="button" id="send_btn">
