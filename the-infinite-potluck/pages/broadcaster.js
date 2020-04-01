@@ -20,7 +20,6 @@ class Broadcaster extends Component {
         const messageBox = document.getElementById('send_btn');
         const data = document.getElementById('data');
         const video = document.createElement('video');
-        const audio = document.createElement('audio');
         video.setAttribute('autoplay', true);
         let messages = [];
         let message = "";
@@ -63,7 +62,7 @@ class Broadcaster extends Component {
             console.log(messages);
         });
 
-        navigator.mediaDevices.getUserMedia({video: true})
+        navigator.mediaDevices.getUserMedia({video: true, audio: true})
             .then((stream) => {
                 video.srcObject = stream;
                 drawToCanvas();
@@ -83,7 +82,6 @@ class Broadcaster extends Component {
             console.log("8) BROADCASTER RECEIVES watcher");
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
-            // let stream = video.srcObject;
             let stream = document.getElementById('canvas').captureStream();
             navigator.mediaDevices.getUserMedia({audio: true, video: false})
                 .then(aStream => {
