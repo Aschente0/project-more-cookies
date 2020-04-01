@@ -83,10 +83,18 @@ class Broadcaster extends Component {
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
             // let stream = video.srcObject;
+            let finalStream = new MediaStream();
             let stream = document.getElementById('canvas').captureStream();
-            let vstream = video.captureStream();
-            stream.addTrack(vstream.getAudioTracks()[0]);
-            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+            stream.getTracks().forEach((track) => {
+                finalStream.addTrack(track);
+            });
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then((astream) => {
+                    astream.getTracks().forEach((track) => {
+                        finalStream.addTrack(track);
+                    });
+                });
+            finalStream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
             .then( () => {
