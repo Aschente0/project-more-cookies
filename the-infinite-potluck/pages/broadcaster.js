@@ -62,7 +62,8 @@ class Broadcaster extends Component {
             console.log(messages);
         });
 
-        navigator.mediaDevices.getUserMedia({video: true, audio: true})
+        // navigator.mediaDevices.getUserMedia({video: true, audio: true})
+        navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then((stream) => {
                 video.srcObject = stream;
                 drawToCanvas();
