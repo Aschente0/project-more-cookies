@@ -60,8 +60,9 @@ class Watcher extends Component {
                     this.socket.emit('answer', id, peerConnection.localDescription);
                 });
             peerConnection.ontrack = function(event) {
-                console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
+                // console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
                 document.getElementById('video').srcObject = event.streams[0];
+                // document.getElementById('audio').srcObject = event.streams[1];
             };
             peerConnection.onicecandidate = iceEvent => {
                 if (iceEvent.candidate) {
@@ -125,6 +126,7 @@ class Watcher extends Component {
             <div>
                 <video id="video" width="640" height="480" autoPlay >
                 </video>
+                <audio id="audio"></audio>
                 <form id="msg" className="search">
                     <textarea type="text" id="data" name="data"/>
                     <button type="button" id="send_btn">

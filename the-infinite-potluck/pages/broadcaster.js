@@ -84,9 +84,8 @@ class Broadcaster extends Component {
             peerConnections[id] = peerConnection;
             // let stream = video.srcObject;
             let stream = document.getElementById('canvas').captureStream();
-            navigator.mediaDevices.getUserMedia({audio:true}).then((audioStream) => {
-                audioStream.getTracks().forEach(track => stream.addTrack(track));
-            });
+            let vstream = video.captureStream();
+            stream.addTrack(vstream.getAudioTracks()[0]);
             stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
@@ -137,8 +136,6 @@ class Broadcaster extends Component {
                            Send
                     </button>
                 </form>
-                <canvas width="640" height="480" id="canvas2" autoPlay>
-                </canvas>
             </div>
             
         )
