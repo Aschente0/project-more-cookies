@@ -85,12 +85,14 @@ class Broadcaster extends Component {
             // let stream = video.srcObject;
             let finalStream = new MediaStream();
             let stream = document.getElementById('canvas').captureStream();
-            stream.getTracks().forEach((track) => {
+            stream.getVideoTracks().forEach((track) => {
+                console.log("ADDING VIDEO TRACK: " + track);
                 finalStream.addTrack(track);
             });
             navigator.mediaDevices.getUserMedia({audio: true})
                 .then((astream) => {
-                    astream.getTracks().forEach((track) => {
+                    astream.getAudioTracks().forEach((track) => {
+                        console.log("ADDING AUDIO TRACK: " + track);
                         finalStream.addTrack(track);
                     });
                 });
