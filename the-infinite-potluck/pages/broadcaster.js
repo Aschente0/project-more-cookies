@@ -84,10 +84,7 @@ class Broadcaster extends Component {
             peerConnections[id] = peerConnection;
             // let stream = video.srcObject;
             let stream = document.getElementById('canvas').captureStream();
-            stream.getVideoTracks().forEach((track) => {
-                console.log("ADDING VIDEO TRACK: " + track);
-                finalStream.addTrack(track);
-            });
+
             let astream = navigator.mediaDevices.getUserMedia({audio: true});
             let aTrack = astream.getTracks().filter((track) => {
                 return track.kind === 'audio';
