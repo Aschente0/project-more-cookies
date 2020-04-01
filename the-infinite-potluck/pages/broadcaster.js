@@ -96,7 +96,7 @@ class Broadcaster extends Component {
                         finalStream.addTrack(track);
                     });
                 });
-            finalStream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+            finalStream.getTracks().forEach(track => peerConnection.addTrack(track, finalStream));
             peerConnection.createOffer()
             .then(sdp => peerConnection.setLocalDescription(sdp))
             .then( () => {
