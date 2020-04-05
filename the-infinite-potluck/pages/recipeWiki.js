@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import Link from 'next/link';
 import secureTemplate from '../static/secure-template';
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
@@ -12,6 +13,7 @@ class RecipeWiki extends Component {
             // toggle elements
             document.getElementById('recipes').hidden = false;
             document.getElementById('indepthRecipe').hidden = true;
+            document.getElementById('chooseBtn').hidden = true;
 
             let data = document.querySelector('#data').value;
             document.getElementById('search').reset();
@@ -53,6 +55,7 @@ class RecipeWiki extends Component {
                                         //toggle elements
                                         document.getElementById('recipes').hidden = true;
                                         document.getElementById('indepthRecipe').hidden = false;
+                                        document.getElementById('chooseBtn').hidden = false;
 
                                         //populate focus view
                                         let focus = document.getElementById('indepthRecipe');
@@ -75,6 +78,7 @@ class RecipeWiki extends Component {
                                         document.getElementById('backBtn').addEventListener("click", () => {
                                             document.getElementById('recipes').hidden = false;
                                             document.getElementById('indepthRecipe').hidden = true;
+                                            document.getElementById('chooseBtn').hidden = true;
                                         });
                                         //ingredients
                                         let  ingredients = document.getElementById('ingredients');
@@ -100,6 +104,11 @@ class RecipeWiki extends Component {
                                                 <li>${step.step}</li>
                                             `;
                                         });
+
+                                        document.getElementById('chooseBtn').addEventListener("click", function(event) {
+                                            localStorage.setItem('data', JSON.stringify(data));
+                                        });
+
                                     });
                                 });
                             });
@@ -123,7 +132,16 @@ class RecipeWiki extends Component {
                         <div id="recipes" className="recipes">
                         </div>
 
-                        <div id="indepthRecipe">
+                        <div>
+                            <div id="indepthRecipe">
+                            </div>
+                            <div>
+                                <Link href="/broadcaster">
+                                    <button id="chooseBtn" hidden>
+                                        Choose Recipe
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
 
                     </div>

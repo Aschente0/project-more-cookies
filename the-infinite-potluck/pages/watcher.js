@@ -20,10 +20,16 @@ class Watcher extends Component {
         this.socket=io('/stream');
 
         let peerConnection;
-        let video = document.getElementById('video');
-
+        const video = document.getElementById('video');
+        const steps = document.getElementById('steps');
         //broadcast the watcher is connected to
         let currBroadcast;
+
+        //video properties
+        let width = (window.innerWidth < 1500) ? window.innerWidth : 1500;
+        let height;
+        let videoWidth;
+        let videoHeight;
 
         // Stream pop-up messaging variables
         const messageBox = document.getElementById('send_btn');
@@ -61,8 +67,8 @@ class Watcher extends Component {
                 });
             peerConnection.ontrack = function(event) {
                 // console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
-                document.getElementById('video').srcObject = event.streams[0];
-                // document.getElementById('audio').srcObject = event.streams[1];
+                video.srcObject = event.streams[0];
+                console.log(video.videoHeight, video.videoWidth);
             };
             peerConnection.onicecandidate = iceEvent => {
                 if (iceEvent.candidate) {
@@ -70,6 +76,23 @@ class Watcher extends Component {
                 }
             };
         });
+
+        //after mounting the video, need to check size
+        video.onresize = () => {
+            if (!videoWidth || !videoHeight){
+                let vRatio = video.videoWidth / video.videoHeight;
+                height = width / vRatio;
+                videoHeight = 0.7 * height;
+                videoWidth = 0.7 * width;
+                video.width = videoWidth;
+                video.height = videoHeight;
+                steps.style.maxWidth = `${0.3 * width}px`;
+                steps.style.height = `${videoHeight}px`;
+                console.log(video.width, video.height);
+            }
+            
+        };
+
 
         this.socket.on('connect', () => {
             console.log("watcher connected");
@@ -88,15 +111,19 @@ class Watcher extends Component {
             let pickstream = document.getElementById('pickstream');
             Object.keys(broadcasters).forEach( (broadcast) => {
                 console.log("BROADCASTER: " + broadcast);
-                pickstream.innerHTML = pickstream.innerHTML + `<button id="${broadcast}">${broadcast}</button>`;
+                pickstream.innerHTML = pickstream.innerHTML + `
+                    <button id="${broadcast}">${broadcasters[broadcast]}</button>
+                `;
 
             });
 
-            Object.keys(broadcasters).forEach( (broadcast) => {
+            Object.keys(broadcasters).forEach((broadcast) => {
                 document.getElementById(broadcast).addEventListener("click", () => {
                     console.log("6) WATCHER HAS CHOSEN A STREAM");
                     currBroadcast = broadcast;
                     this.socket.emit('stream_chosen', broadcast);
+                    //set the name of the stream to chosen broadcaster's stream
+                    document.getElementById('title').innerHTML = `${broadcasters[broadcast]}`;
                 });
             });
         });
@@ -107,9 +134,37 @@ class Watcher extends Component {
             .catch(err => console.error(err));
         });
 
-        this.socket.on('dc', () => {
+        this.socket.on('recipe_data', (data) => {
+            console.log("WATCHER RECEIVES recipe_data");
+            console.log("DATA: " + data.title);
+            let instructions = data.analyzedInstructions[0].steps;
+            instructions.forEach(instruction => {
+                steps.innerHTML = steps.innerHTML + `
+                    <li style="padding-top:10px;padding-bottom:10px;padding-right:10px;">
+                        ${instruction.step}
+                    </li>
+                    <hr class="solid">
+                `;
+            });
+
+        });
+
+        this.socket.on('stream_data', (viewCount) => {
+            console.log("WATCHER RECEIVES stream_data");
+            console.log(viewCount);
+            document.getElementById('stream_count').innerHTML = `${viewCount}`;
+        });
+
+        this.socket.on('dc', (broadcast) => {
             console.log("WATCHER RECEIVED DISCONNECT");
-            peerConnection.close();
+            let doc = document.getElementById(broadcast);
+            if (doc){
+                doc.parentNode.removeChild(doc);
+            }
+            if(broadcast == currBroadcast){
+                peerConnection.close();
+            }
+            
         });
 
         Router.beforePopState(({url, as, options}) => {
@@ -124,17 +179,84 @@ class Watcher extends Component {
     render(){
         return(
             <div>
-                <video id="video" width="640" height="480" autoPlay >
-                </video>
-                <audio id="audio" autoPlay></audio>
-                <form id="msg" className="search">
-                    <textarea type="text" id="data" name="data"/>
-                    <button type="button" id="send_btn">
-                           Send
-                    </button>
-                </form>
-                <div id="pickstream">
+                <div className="main">
+                    <div className="body">
+                        <div id="title" className="title">
+                        </div>
+                        <div className="content">
+                            <div className="content_items">
+                                <video id="video" autoPlay>
+                                </video> 
+                            </div>
+                            <div className="content_items">
+                               <ol id="steps" className="steps">
+                                </ol> 
+                            </div>
+                        </div>
+                        <div id="stream_stats" className="stream_stats">
+                            <img src="/viewer.png" className="viewerIcon"/>
+                            <div id="stream_count">
+                            </div>
+                        </div>
+                        <form id="msg">
+                            <textarea type="text" id="data" name="data"/>
+                            <button type="button" id="send_btn">
+                                Send
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="pickstream">
+                    </div>
                 </div>
+                <style jsx>{`
+                    .main{
+                        font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+                        'Arial', sans-serif;
+                        padding: 20px 20px 60px;
+                        max-width: 1500px;
+                        margin: 0 auto;
+                    }
+                    .body {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .title {
+                        font-size: 40px;
+                        padding-bottom: 20px;
+                    }
+                    .content {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                    }
+                    .content_items {
+                        display: inline-block;
+                    }
+                    .canvas {
+                        border: 1px solid blue;
+                    }
+                    .steps {
+                        display: list-item;
+                        float: left;
+                        clear: both;
+                        border: 1px solid blue;
+                        margin-top: 1px;
+                        padding-inline-start: 25px;
+                        overflow: scroll;
+                    }
+                    .stream_stats {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: start;
+                    }
+                    .viewerIcon {
+                        height: 50px;
+                        width: 50px;
+                    }
+                `}
+                </style>
             </div>
             
         )

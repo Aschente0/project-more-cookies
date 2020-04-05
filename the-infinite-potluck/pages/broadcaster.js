@@ -2,23 +2,35 @@ import { Component } from 'react';
 import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
-import { CpsContext } from 'twilio/lib/rest/preview/trusted_comms/cps';
-import Video from 'twilio/lib/rest/Video';
-
-
+import PropTypes from 'prop-types';
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
 
 class Broadcaster extends Component {
     componentDidMount(){
+        let canvasComp = document.getElementById('canvas');
         this.socket=io('/stream');
-        
+        let recipe;
+        let steps = document.getElementById('steps');
+        if(localStorage.getItem('data')) {
+            recipe = JSON.parse(localStorage.getItem('data'));
+            document.getElementById('title').innerHTML = `${this.props.loggedInUser.nickname}'s ${recipe.title}`;
+            let instructions = recipe.analyzedInstructions[0].steps;
+            instructions.forEach(instruction => {
+                steps.innerHTML = steps.innerHTML + `
+                    <li style="padding-top:10px;padding-bottom:10px;padding-right:10px;">
+                        ${instruction.step}
+                    </li>
+                    <hr class="solid">
+                `;
+            });
+        }
+
         const peerConnections = {};
+        let peerCount = 0;
         // const video = document.getElementById('video');
         const canvas = document.getElementById('canvas').getContext('2d');
-        const messageBox = document.getElementById('send_btn');
-        const data = document.getElementById('data');
         const video = document.createElement('video');
         video.setAttribute('autoplay', true);
         let messages = [];
@@ -26,8 +38,14 @@ class Broadcaster extends Component {
         let pause = false;
         let speech = new SpeechSynthesisUtterance();
 
+        //video properties
+        let width = (window.innerWidth < 1500) ? window.innerWidth : 1500;
+        let height;
+        let videoWidth;
+        let videoHeight;
+
         const drawToCanvas = () => {
-            canvas.drawImage(video, 0, 0, 640, 480);
+            canvas.drawImage(video, 0, 0, videoWidth, videoHeight);
             canvas.font = "20px Comic Sans MS";
             canvas.fillStyle = "blue";
             // draw message for 5 seconds, pause for 2 seconds before drawing new message
@@ -53,7 +71,7 @@ class Broadcaster extends Component {
             }
             canvas.fillText(message, 10, 50);
             requestAnimationFrame(drawToCanvas);
-        }
+        };
 
         //signal for stream pop-up
         this.socket.on('stream_popup', message => {
@@ -65,10 +83,24 @@ class Broadcaster extends Component {
         // navigator.mediaDevices.getUserMedia({video: true, audio: true})
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then((stream) => {
+                //get video info
+                let vtrack = stream.getVideoTracks()[0].getSettings();
+                const vRatio = (vtrack.width / vtrack.height);
+                height = width / vRatio;
+                //size up canvas and streamPlugin accordingly
+                console.log(width, height);
+                videoWidth = 0.7 * width;
+                videoHeight = 0.7 * height;
+                canvasComp.width = videoWidth;
+                canvasComp.height = videoHeight;
+                steps.style.maxWidth = `${0.3 * width}px`;
+                steps.style.height = `${videoHeight}px`;
+                console.log("HERE: " + steps.style.maxWidth, steps.style.maxHeight);
                 video.srcObject = stream;
                 drawToCanvas();
                 console.log("1) BROADCASTER EMITS broadcaster");
-                this.socket.emit('broadcaster');
+                console.log(this.props);
+                this.socket.emit('broadcaster', recipe.title, this.props.loggedInUser.nickname);
             })
             .catch(function (err) {
                 console.log(err);
@@ -83,6 +115,9 @@ class Broadcaster extends Component {
             console.log("8) BROADCASTER RECEIVES watcher");
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
+            peerCount++;
+        
+            //Send over stream to connected watcher
             let stream = document.getElementById('canvas').captureStream();
             navigator.mediaDevices.getUserMedia({audio: true, video: false})
                 .then(aStream => {
@@ -99,6 +134,8 @@ class Broadcaster extends Component {
                         .then( () => {
                             console.log("9) BROADCASTER EMITS offer")
                             this.socket.emit('offer', id, peerConnection.localDescription);
+                            // send over initial recipe of the stream
+                            this.socket.emit('recipe_data', id, recipe);
                         });
                         peerConnection.onicecandidate = iceEvent => {
                             if (iceEvent.candidate) {
@@ -108,6 +145,9 @@ class Broadcaster extends Component {
                         };
                     });
                 });
+            //Here, we can send over viewer data of the stream; updates every time a watcher connnects
+            console.log("PEER CONNECTIONS: " + Object.keys(peerConnections));
+            this.socket.emit('stream_data', Object.keys(peerConnections), peerCount);
         });
 
         this.socket.on('candidate', (id, candidate) => {
@@ -120,11 +160,17 @@ class Broadcaster extends Component {
             if(peerConnections[id]){
                 peerConnections[id].close();
                 delete peerConnections[id];
+                peerCount--;
+                this.socket.emit('stream_data', Object.keys(peerConnections), peerCount);
             }
         });
 
         Router.beforePopState(({url, as, options}) => {
             console.log("ATTEMPTING TO DISCONNECT AS BROADCASTER");
+            // clear recipe data
+            if(localStorage.getItem('data')) {
+                localStorage.removeItem('data');
+            }
             if(as !== "/" || as !== "/other") {
                 window.location.href = as;
                 return false;
@@ -137,17 +183,66 @@ class Broadcaster extends Component {
     render(){
         return(
             <div>
-                <canvas width="640" height="480" id="canvas" autoPlay>
-                </canvas>
-                <form id="msg" className="search">
-                    <textarea type="text" id="data" name="data"/>
-                    <button type="button" id="send_btn">
-                           Send
-                    </button>
-                </form>
+                <div className="main">
+                    <div className="body">
+                        <div id="title" className="title">
+                        </div>
+                        <div className="content">
+                            <div className="content_items">
+                               <canvas id="canvas" className="canvas" autoPlay>
+                                </canvas> 
+                            </div>
+                            <div className="content_items">
+                               <ol id="steps" className="steps">
+                                </ol> 
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <style jsx>{`
+                    .main{
+                        font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+                        'Arial', sans-serif;
+                        padding: 20px 20px 60px;
+                        max-width: 1500px;
+                        margin: 0 auto;
+                    }
+                    .body {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .title {
+                        font-size: 40px;
+                        padding-bottom: 20px;
+                    }
+                    .content {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                    }
+                    .content_items {
+                        display: inline-block;
+                    }
+                    .canvas {
+                        border: 1px solid blue;
+                    }
+                    .steps {
+                        display: list-item;
+                        float: left;
+                        clear: both;
+                        border: 1px solid blue;
+                        margin-top: 1px;
+                        padding-inline-start: 25px;
+                        overflow: scroll;
+                    }
+                `}
+                </style> 
             </div>
             
         )
     }
 }
+
 export default secureTemplate(Broadcaster);

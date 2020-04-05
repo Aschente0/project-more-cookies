@@ -56,6 +56,11 @@ const Home = () => {
               <p>To watch stream</p>
             </a>
           </Link>
+          <Link href="/credits">
+            <a className="card">
+              <h3> Credits </h3>
+            </a>
+          </Link>
         </div>
       </div>
       <style jsx>{`

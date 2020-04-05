@@ -26,16 +26,19 @@ client.tokens.create().then(token => {
 /* STREAMING COMMUNICATION CHANNEL */
 const streamio = io.of('/stream');
 streamio.on('connection', socket => {
-  socket.on('broadcaster', () =>{
+  socket.on('broadcaster', (title, name) =>{
       let broadcaster = socket.id;
-      broadcasters[broadcaster] = broadcaster;
+      broadcasters[broadcaster] = `${name}'s ${title}`;
       console.log("2) SERVER RECEIVES broadcaster AND BROADCASTS broadcaster");
+      console.log("BROADCASTER SOCKET: " + socket.id);
       console.log(config);
+      console.log("BROADCASTERS: " + Object.keys(broadcasters));
       socket.emit('broadcaster', config);
   });
 
   socket.on('watcher', () =>{
-    console.log("4) SERVER RECEIVES watcher AND EMITS pickstream");
+    console.log("4) SERVER RECEIVES watcher AND EMITS stream_choice");
+    console.log("WATCHER SOCKET: " + socket.id);
     socket.emit('stream_choice', broadcasters);
   });
 
@@ -65,16 +68,39 @@ streamio.on('connection', socket => {
     socket.to(id).emit('stream_popup', message);
   });
 
+  socket.on('recipe_data', (id, data) => {
+    console.log("SERVER EMITS recipe_data");
+    socket.to(id).emit('recipe_data', data);
+  });
+
   socket.on('message_synth', (message) => {
     console.log("SERVER RECEIVES message_synth");
     socket.broadcast.emit('message_synth', socket.id, message);
   });
 
-  socket.on('disconnect', () => {
-    console.log("SERVER RECEIVED DISCONNECT");
-    Object.keys(broadcasters).forEach((broadcaster) => {
-      socket.to(broadcaster).emit('dc', socket.id);
+  socket.on('stream_data', (watchers, viewCount) => {
+    console.log("SERVER RECEIVES stream_data");
+     watchers.forEach( (watcher) => {
+      console.log(watcher);
+      socket.to(watcher).emit('stream_data', viewCount);
     });
+  });
+
+  socket.on('disconnect', () => {
+    console.log("SERVER RECEIVED DISCONNECT: " + socket.id);
+    // if (socket.id in Object.keys(broadcasters)){
+    //   Object.keys(broadcasters).forEach((broadcaster) => {
+    //     socket.to(broadcaster).emit('dc', socket.id);
+    //   });
+    // }
+    // else {
+    //   delete broadcasters[socket.id];
+    //   socket.broadcast.emit('dc', socket.id);
+    // }
+    if (socket.id in Object.keys(broadcasters)){
+      delete broadcasters[socket.id];
+    }
+    socket.broadcast.emit('dc', socket.id);
     
   });
 });
