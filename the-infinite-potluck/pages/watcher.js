@@ -15,13 +15,37 @@ class Watcher extends Component {
         }
     }
 
-    componentDidMount(){
+    toggle(){
+        let video = document.getElementById('video');
+        let steps = document.getElementById('steps');
+        let msg = document.getElementById('msg');
+        let send_btn = document.getElementById('send_btn');
+        let icon = document.getElementById('icon');
+        let streams = document.getElementById('pickstream');
+        video.hidden = !video.hidden;
+        steps.hidden = !steps.hidden;
+        if (steps.hidden) {
+            steps.style.display = 'none';
+        }
+        else {
+            steps.style.display = 'list-item';
+        }
+        msg.hidden = !msg.hidden;
+        send_btn.hidden = !send_btn.hidden;
+        icon.hidden = !icon.hidden;
+        streams.hidden = !streams.hidden;
+    }
 
+    componentDidMount(){
         this.socket=io('/stream');
 
         let peerConnection;
         const video = document.getElementById('video');
         const steps = document.getElementById('steps');
+
+        //Toggle elements off before choosing stream
+        this.toggle();
+
         //broadcast the watcher is connected to
         let currBroadcast;
 
@@ -119,11 +143,14 @@ class Watcher extends Component {
 
             Object.keys(broadcasters).forEach((broadcast) => {
                 document.getElementById(broadcast).addEventListener("click", () => {
+                    //toggle UI elements
+                    this.toggle();
                     console.log("6) WATCHER HAS CHOSEN A STREAM");
                     currBroadcast = broadcast;
                     this.socket.emit('stream_chosen', broadcast);
                     //set the name of the stream to chosen broadcaster's stream
                     document.getElementById('title').innerHTML = `${broadcasters[broadcast]}`;
+                    
                 });
             });
         });
@@ -181,11 +208,10 @@ class Watcher extends Component {
             <div>
                 <div className="main">
                     <div className="body">
-                        <div id="title" className="title">
-                        </div>
+                        <div id="title" className="title"></div>
                         <div className="content">
                             <div className="content_items">
-                                <video id="video" autoPlay>
+                                <video id="video" autoPlay controls>
                                 </video> 
                             </div>
                             <div className="content_items">
@@ -193,20 +219,23 @@ class Watcher extends Component {
                                 </ol> 
                             </div>
                         </div>
+                    </div>
+                    <div className="bottom">
                         <div id="stream_stats" className="stream_stats">
-                            <img src="/viewer.png" className="viewerIcon"/>
-                            <div id="stream_count">
+                            <img src="/viewer.png" id="icon" className="viewer_icon"/>
+                            <div id="stream_count" className="stream_count">
                             </div>
                         </div>
-                        <form id="msg">
-                            <textarea type="text" id="data" name="data"/>
-                            <button type="button" id="send_btn">
-                                Send
-                            </button>
-                        </form>
                     </div>
-
-                    <div id="pickstream">
+                    <div id="message_box" className="message_box">
+                        <form id="msg" className="form">
+                            <textarea type="text" id="data" className="textarea" name="data"/>
+                        </form>
+                        <button type="button" id="send_btn">
+                            Send
+                        </button>
+                    </div>
+                    <div id="pickstream" hidden>
                     </div>
                 </div>
                 <style jsx>{`
@@ -225,35 +254,63 @@ class Watcher extends Component {
                     .title {
                         font-size: 40px;
                         padding-bottom: 20px;
+                        color: #067df7;
                     }
                     .content {
                         display: flex;
                         flex-direction: row;
                         justify-content: center;
+                        box-shadow: 5px 2px 2px grey;
                     }
                     .content_items {
-                        display: inline-block;
+                        display: flex;
                     }
                     .canvas {
-                        border: 1px solid blue;
+                        border: 1px solid gray;
                     }
                     .steps {
                         display: list-item;
                         float: left;
                         clear: both;
-                        border: 1px solid blue;
-                        margin-top: 1px;
+                        border: 1px solid gray;
+                        margin-top: 0px;
+                        margin-bottom: 0px;
                         padding-inline-start: 25px;
                         overflow: scroll;
+                        background: white;
                     }
                     .stream_stats {
                         display: flex;
                         flex-direction: row;
-                        justify-content: start;
+                        position: relative;
+                        padding: 5px;
+                        background: #067df7;
                     }
-                    .viewerIcon {
-                        height: 50px;
-                        width: 50px;
+                    .viewer_icon {
+                        height: 25px;
+                        width: 25px;
+                        padding-right: 5px;
+                    }
+                    .stream_count {
+                        padding-top: 5px;
+                    }
+                    .bottom {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        background: #067df7;
+                        box-shadow: 5px 5px 2px grey;
+                    }
+                    .message_box {
+                        display: flex;
+                        flex-direction: row;
+                        margin-top: 10px;
+                    }
+                    .form {
+                        width: 99%;
+                    }
+                    .textarea {
+                        width: 99%;
                     }
                 `}
                 </style>

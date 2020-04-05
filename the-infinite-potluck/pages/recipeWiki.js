@@ -1,20 +1,29 @@
 import { Component } from 'react';
 import Link from 'next/link';
-import secureTemplate from '../static/secure-template';
+import secureTemplate from '../static/secure-template-wheader';
 
 const apiKey = '56c94cc84b534f349b59f11eb9d6ae51';
 
 class RecipeWiki extends Component {
+    constructor(props){
+        super(props);
+    }
+    
+    toggle() {
+        let recipes = document.getElementById('recipes');
+        let indepthRecipe = document.getElementById('indepthRecipe');
+        if (recipes.hidden){
+            recipes.hidden = !recipes.hidden;
+            indepthRecipe.hidden = !indepthRecipe.hidden;
+        }
+        
+    }
+
     componentDidMount(){
         const search = document.getElementById('search');
-        search.addEventListener('submit', function(event){
+        search.addEventListener('submit', (event) => {
             event.preventDefault();
-
-            // toggle elements
-            document.getElementById('recipes').hidden = false;
-            document.getElementById('indepthRecipe').hidden = true;
-            document.getElementById('chooseBtn').hidden = true;
-
+            this.toggle();
             let data = document.querySelector('#data').value;
             document.getElementById('search').reset();
             console.log(data);
@@ -33,7 +42,7 @@ class RecipeWiki extends Component {
                             let imageUrl = result.image;
                             console.log(baseUri + imageUrl);
                             recipe.innerHTML = recipe.innerHTML + `
-                            <div id="${result.id}" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #000;padding:3px;">
+                            <div id="${result.id}" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;">
                                 <img src="${baseUri + imageUrl}" height="200" style="padding-right:50px;"/>
                                 <div style="display:flex;flex-direction:column;">
                                     <div style="padding-bottom:68px;font-size:30px;;">${result.title}</div>
@@ -56,22 +65,23 @@ class RecipeWiki extends Component {
                                         document.getElementById('recipes').hidden = true;
                                         document.getElementById('indepthRecipe').hidden = false;
                                         document.getElementById('chooseBtn').hidden = false;
-
+                                        document.getElementById('backBtn').hidden = false;
                                         //populate focus view
                                         let focus = document.getElementById('indepthRecipe');
                                         //general info
                                         focus.innerHTML = `
                                             <div style="display:flex;flex-direction:column;"> 
                                                 <div style="font-size:50px;align-self:center;">${data.title}</div>
-                                                <div style="display:flex;flex-direction:column;border:3px solid #000;align-self:center;padding:5px;margin-bottom:10px;">
-                                                    <img src="${data.image}"/>
+                                                <div style="display:flex;flex-direction:column;align-self:center;padding:5px;">
+                                                    <img src="${data.image}" style="border:3px solid #067df7;margin-bottom:10px;box-shadow: 2px 2px 1px grey;"/>
                                                     <div>${data.summary}</div>
                                                 </div>
-                                                <div>Ingredients: </div>
-                                                <ul id="ingredients"></ul>
-                                                <div>Directions: </div>
-                                                <ol id="steps"></ol>
-                                                <button id="backBtn">Back</button>
+                                                <div>
+                                                    <div>Ingredients: </div>
+                                                    <ul id="ingredients"></ul>
+                                                    <div>Directions: </div>
+                                                    <ol id="steps"></ol>
+                                                </div>
                                             </div>
                                         `;
                                         //back button toggles
@@ -79,6 +89,7 @@ class RecipeWiki extends Component {
                                             document.getElementById('recipes').hidden = false;
                                             document.getElementById('indepthRecipe').hidden = true;
                                             document.getElementById('chooseBtn').hidden = true;
+                                            document.getElementById('backBtn').hidden = true;
                                         });
                                         //ingredients
                                         let  ingredients = document.getElementById('ingredients');
@@ -122,45 +133,64 @@ class RecipeWiki extends Component {
             <div>
                 <div className="main">
                     <div className="body">
-                        <form id="search" className="search">
-                            <input type="text" id="data" name="data"/>
+                        <div id="header" className="header">
+                            <h3>Search for a recipe</h3>
+                            <form id="search" className="search">
+                            <input type="text" id="data" name="data" placeholder="Search for a recipe..." size="40"/>
                             <button id="search_btn">
                                 Search
                             </button>
                         </form>
+                        </div>
                         
-                        <div id="recipes" className="recipes">
+                        <div id="recipes" className="recipes" hidden>
                         </div>
 
-                        <div>
-                            <div id="indepthRecipe">
+                        <div className="indepth">
+                            <div id="indepthRecipe" hidden>
                             </div>
-                            <div>
-                                <Link href="/broadcaster">
-                                    <button id="chooseBtn" hidden>
-                                        Choose Recipe
-                                    </button>
-                                </Link>
-                            </div>
+                            <Link href="/broadcaster">
+                                <button id="chooseBtn" hidden>
+                                    Choose Recipe
+                                </button>
+                            </Link>
+                            <button id="backBtn" hidden>Back</button>
                         </div>
 
                     </div>
 
                     <style jsx>{`
-                    .main{
+                    .main {
                         font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
                         'Arial', sans-serif;
                         padding: 20px 20px 60px;
                         max-width: 680px;
                         margin: 0 auto;
                     }
+                    .header {
+                        font-size: 30px;
+                        color: #067df7;
+                        padding-left: 5px;
+                        margin-bottom:10px;
+                        border: 2px solid #067df7;
+                        box-shadow: 5px 5px 2px grey;
+                    }
                     .body {
                         display: flex;
                         flex-direction: column;
                     }
                     .search {
-                        padding-bottom: 80px;
+                        display: flex;
+                        justify-content: flex-start;
+                        padding-bottom: 30px;
                         align-items: center;
+                    }
+                    .indepth {
+                        display: flex;
+                        flex-direction: column;
+                        border: 2px solid #067df7;
+                        box-shadow: 5px 5px 2px grey;
+                        padding: 5px;
                     }
                     `}
                     </style>

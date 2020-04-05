@@ -2,7 +2,6 @@ import { Component } from 'react';
 import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
-import PropTypes from 'prop-types';
 
 /***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
 
@@ -29,6 +28,7 @@ class Broadcaster extends Component {
 
         const peerConnections = {};
         let peerCount = 0;
+        document.getElementById('stream_count').innerHTML = `${peerCount}`;
         // const video = document.getElementById('video');
         const canvas = document.getElementById('canvas').getContext('2d');
         const video = document.createElement('video');
@@ -46,7 +46,8 @@ class Broadcaster extends Component {
 
         const drawToCanvas = () => {
             canvas.drawImage(video, 0, 0, videoWidth, videoHeight);
-            canvas.font = "20px Comic Sans MS";
+            let font = Math.floor(videoWidth/30);
+            canvas.font = `${font}px Comic Sans MS`;
             canvas.fillStyle = "blue";
             // draw message for 5 seconds, pause for 2 seconds before drawing new message
             if((messages.length) && (message == "") && !pause) {
@@ -69,7 +70,11 @@ class Broadcaster extends Component {
                     }, 5000);
                 };
             }
-            canvas.fillText(message, 10, 50);
+            let max_chars = Math.floor((videoWidth) / font);
+            let line;
+            for (line = 1; line <= Math.ceil(message.length / max_chars); line++){
+                canvas.fillText(message.substring((line-1) * max_chars, Math.min(line * max_chars, message.length)), 10, (line-1)*font + 30);
+            }
             requestAnimationFrame(drawToCanvas);
         };
 
@@ -116,7 +121,8 @@ class Broadcaster extends Component {
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
             peerCount++;
-        
+            document.getElementById('stream_count').innerHTML = `${peerCount}`;
+
             //Send over stream to connected watcher
             let stream = document.getElementById('canvas').captureStream();
             navigator.mediaDevices.getUserMedia({audio: true, video: false})
@@ -161,6 +167,7 @@ class Broadcaster extends Component {
                 peerConnections[id].close();
                 delete peerConnections[id];
                 peerCount--;
+                document.getElementById('stream_count').innerHTML = `${peerCount}`;
                 this.socket.emit('stream_data', Object.keys(peerConnections), peerCount);
             }
         });
@@ -176,9 +183,6 @@ class Broadcaster extends Component {
                 return false;
             }
         });
-
-
-
     }    
     render(){
         return(
@@ -189,7 +193,7 @@ class Broadcaster extends Component {
                         </div>
                         <div className="content">
                             <div className="content_items">
-                               <canvas id="canvas" className="canvas" autoPlay>
+                               <canvas id="canvas" className="canvas" autoPlay >
                                 </canvas> 
                             </div>
                             <div className="content_items">
@@ -198,7 +202,12 @@ class Broadcaster extends Component {
                             </div>
                         </div>
                     </div>
-                    
+                    <div className="bottom" >
+                        <div id="stream_stats" className="stream_stats">
+                            <img src="/viewer.png" id="icon" className="viewer_icon" />
+                            <div id="stream_count" className="stream_count"></div>
+                        </div>
+                    </div>
                 </div>
                 <style jsx>{`
                     .main{
@@ -216,26 +225,52 @@ class Broadcaster extends Component {
                     .title {
                         font-size: 40px;
                         padding-bottom: 20px;
+                        color: #067df7;
                     }
                     .content {
                         display: flex;
                         flex-direction: row;
                         justify-content: center;
+                        box-shadow: 5px 2px 2px grey;
                     }
                     .content_items {
-                        display: inline-block;
+                        display: flex;
                     }
                     .canvas {
-                        border: 1px solid blue;
+                        border: 1px solid gray;
                     }
                     .steps {
                         display: list-item;
                         float: left;
                         clear: both;
-                        border: 1px solid blue;
-                        margin-top: 1px;
+                        border: 1px solid gray;
+                        margin-top: 0px;
+                        margin-bottom: 0px;
                         padding-inline-start: 25px;
                         overflow: scroll;
+                        background: white;
+                    }
+                    .stream_stats {
+                        display: flex;
+                        flex-direction: row;
+                        position: relative;
+                        padding: 5px;
+                        background: #067df7;
+                    }
+                    .viewer_icon {
+                        height: 25px;
+                        width: 25px;
+                        padding-right: 5px;
+                    }
+                    .stream_count {
+                        padding-top: 5px;
+                    }
+                    .bottom {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        background: #067df7;
+                        box-shadow: 5px 5px 2px grey;
                     }
                 `}
                 </style> 

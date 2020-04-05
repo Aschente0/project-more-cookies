@@ -97,9 +97,13 @@ streamio.on('connection', socket => {
     //   delete broadcasters[socket.id];
     //   socket.broadcast.emit('dc', socket.id);
     // }
-    if (socket.id in Object.keys(broadcasters)){
+    console.log("BROADCASTERS BEFORE DISCONNECT: " + Object.keys(broadcasters));
+    console.log("BROADCASTER TO DELETE: " + socket.id);
+    if (socket.id in broadcasters){
+      console.log("BROADCASTER DELETED");
       delete broadcasters[socket.id];
     }
+    console.log("BROADCASTERS AFTER DISCONNECT: " + Object.keys(broadcasters));
     socket.broadcast.emit('dc', socket.id);
     
   });
