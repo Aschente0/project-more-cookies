@@ -3,16 +3,9 @@ import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
 
-/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
-
-
 class Watcher extends Component {
     constructor(props){
         super(props);
-
-        this.state={
-            broadcasters: []
-        }
     }
 
     toggle(){
@@ -135,8 +128,18 @@ class Watcher extends Component {
             let pickstream = document.getElementById('pickstream');
             Object.keys(broadcasters).forEach( (broadcast) => {
                 console.log("BROADCASTER: " + broadcast);
+                let recipe = broadcasters[broadcast][0];
+                let streamer = broadcasters[broadcast][1];
                 pickstream.innerHTML = pickstream.innerHTML + `
-                    <button id="${broadcast}">${broadcasters[broadcast]}</button>
+                    <div id="${broadcast}" onMouseOver="this.style.background='#87CEFA';" onMouseOut="this.style.background='#F0F8FF';" style="display:flex;flex-direction:column;align-items:center;margin:20px;border:2px solid #067df7;padding:3px;box-shadow:5px 5px 2px grey;background: #F0F8FF;">
+                        <div>
+                            <div style="font-size: 30px;">${streamer}'s Stream</div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:center;">
+                            <div style="font-size: 20px;color:DarkBlue;">${recipe.title}</div>
+                            <img src="${recipe.image}" height="100" style="border:1px solid #067df7;margin:5px;"/>
+                        </div>
+                    </div>
                 `;
 
             });
@@ -149,7 +152,9 @@ class Watcher extends Component {
                     currBroadcast = broadcast;
                     this.socket.emit('stream_chosen', broadcast);
                     //set the name of the stream to chosen broadcaster's stream
-                    document.getElementById('title').innerHTML = `${broadcasters[broadcast]}`;
+                    let recipe = broadcasters[broadcast][0];
+                    let streamer = broadcasters[broadcast][1];
+                    document.getElementById('title').innerHTML = `${streamer}'s ${recipe.title}`;
                     
                 });
             });
@@ -211,7 +216,7 @@ class Watcher extends Component {
                         <div id="title" className="title"></div>
                         <div className="content">
                             <div className="content_items">
-                                <video id="video" autoPlay controls>
+                                <video id="video" className="video" autoPlay controls>
                                 </video> 
                             </div>
                             <div className="content_items">
@@ -265,8 +270,9 @@ class Watcher extends Component {
                     .content_items {
                         display: flex;
                     }
-                    .canvas {
-                        border: 1px solid gray;
+                    .video {
+                        margin: 0px;
+                        background: #067df7
                     }
                     .steps {
                         display: list-item;
@@ -311,6 +317,10 @@ class Watcher extends Component {
                     }
                     .textarea {
                         width: 99%;
+                    }
+                    .pickstream {
+                        display: flex;
+                        flex-direction: column;
                     }
                 `}
                 </style>

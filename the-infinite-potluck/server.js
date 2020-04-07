@@ -26,9 +26,9 @@ client.tokens.create().then(token => {
 /* STREAMING COMMUNICATION CHANNEL */
 const streamio = io.of('/stream');
 streamio.on('connection', socket => {
-  socket.on('broadcaster', (title, name) =>{
+  socket.on('broadcaster', (recipe, name) =>{
       let broadcaster = socket.id;
-      broadcasters[broadcaster] = `${name}'s ${title}`;
+      broadcasters[broadcaster] = [recipe, name];
       console.log("2) SERVER RECEIVES broadcaster AND BROADCASTS broadcaster");
       console.log("BROADCASTER SOCKET: " + socket.id);
       console.log(config);

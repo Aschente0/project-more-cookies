@@ -42,7 +42,7 @@ class RecipeWiki extends Component {
                             let imageUrl = result.image;
                             console.log(baseUri + imageUrl);
                             recipe.innerHTML = recipe.innerHTML + `
-                            <div id="${result.id}" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;">
+                            <div id="${result.id}" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;background: #F0F8FF;">
                                 <img src="${baseUri + imageUrl}" height="200" style="padding-right:50px;"/>
                                 <div style="display:flex;flex-direction:column;">
                                     <div style="padding-bottom:68px;font-size:30px;;">${result.title}</div>
@@ -150,11 +150,11 @@ class RecipeWiki extends Component {
                             <div id="indepthRecipe" hidden>
                             </div>
                             <Link href="/broadcaster">
-                                <button id="chooseBtn" hidden>
+                                <button id="chooseBtn" className="btn" hidden>
                                     Choose Recipe
                                 </button>
                             </Link>
-                            <button id="backBtn" hidden>Back</button>
+                            <button id="backBtn" className="btn" hidden>Back</button>
                         </div>
 
                     </div>
@@ -174,6 +174,7 @@ class RecipeWiki extends Component {
                         margin-bottom:10px;
                         border: 2px solid #067df7;
                         box-shadow: 5px 5px 2px grey;
+                        background: #F0F8FF;
                     }
                     .body {
                         display: flex;
@@ -184,13 +185,21 @@ class RecipeWiki extends Component {
                         justify-content: flex-start;
                         padding-bottom: 30px;
                         align-items: center;
+                        background: #F0F8FF;
                     }
                     .indepth {
                         display: flex;
                         flex-direction: column;
+                        background: #F0F8FF;
                         border: 2px solid #067df7;
                         box-shadow: 5px 5px 2px grey;
                         padding: 5px;
+                    }
+                    .btn {
+                        background-color: #067df7;
+                        border: 2px solid CornFlowerBlue;
+                        color: white;
+                        margin: 5px;
                     }
                     `}
                     </style>

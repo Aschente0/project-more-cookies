@@ -4,139 +4,111 @@ import Head from '../components/head';
 import PropTypes from 'prop-types';
 import template from '../static/template';
 
-const Home = () => {
-  const [date, setDate] = useState(null);
-  useEffect(() => {
-    async function getDate() {
-      const res = await fetch('/api/date');
-      const newDate = await res.json();
-      setDate(newDate);
-    }
-    getDate();
-  }, []);
+const Home = ({ loggedInUser }) => {
+
   return (
     <div>
       <Head title="Home" />
       <div className="hero">
-        <h1 className="title">The Infinite Potluck</h1>
-        <p className="description">
-          To get started, edit the <code>pages/index.js</code> or{' '}
-          <code>pages/api/date.js</code> files, then save to reload.
-        </p>
-        <p className="row date">
-          The date is:&nbsp;{' '}
-          {date ? (
-            <span>
-              <b>{date.date}</b>
-            </span>
-          ) : (
-            <span className="loading"></span>
-          )}
-        </p>
-        <div className="row">
+        <div className="header">
+          <img src="/favicon.ico" className="logo"/>
+          <h1 className="title">Cookies</h1>
+        </div>
+        <div>
+          {loggedInUser ? <div>Welcome, <a className="user">{loggedInUser.nickname}</a></div> : ""}
+        </div>
+        <div className="main">
           <Link href="/recipeWiki">
             <a className="card">
-              <h3>Recipe Wiki &rarr;</h3>
-            </a>
-          </Link>
-          <Link href="/recipeCollab">
-            <a className="card">
-              <h3>Recipe Collab &rarr;</h3>
-            </a>
-          </Link>
-          <Link href="/broadcaster">
-            <a className="card">
-              <h3>Broadcaster &rarr;</h3>
-              <p>To stream</p>
+              <h3>Broadcast your recipe</h3>
+              <p>Choose a recipe and share the process with the world!</p>
             </a>
           </Link>
           <Link href="/watcher">
             <a className="card">
-              <h3>Watcher &rarr;</h3>
-              <p>To watch stream</p>
-            </a>
-          </Link>
-          <Link href="/credits">
-            <a className="card">
-              <h3> Credits </h3>
+              <h3>Watch a stream</h3>
+              <p>Experience the process of cooking a variety of dishes!</p>
             </a>
           </Link>
         </div>
+        <Link href="/credits">
+            <a className="footer">
+              <h3> Credits </h3>
+            </a>
+        </Link>
       </div>
       <style jsx>{`
         .hero {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           width: 100%;
           color: #333;
         }
         .title {
           margin: 0;
           width: 100%;
-          padding-top: 80px;
-          line-height: 1.15;
           font-size: 48px;
         }
-        .title,
-        .description {
-          text-align: center;
-        }
-        .row {
-          max-width: 880px;
-          margin: 80px auto 40px;
+        .header {
           display: flex;
           flex-direction: row;
-          justify-content: space-around;
+          padding-top: 80px;
+          padding-bottom: 20px;
         }
-        .date {
-          height: 24px;
-          max-width: calc(100% - 32px)
-          text-align: center;
+        .logo {
+          width: 80px;
+          height: 80px;
+        }
+        .title {
+          padding-left: 10px;
+          padding-top: 10px;
+        }
+        .user {
+          color: #067df7;
+        }
+        .main {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0 16px;
-        }
-        .date p {
-          text-align: center;
-        }
-        .date span {
-          width: 176px;
-          text-align: center;
-        }
-        @keyframes Loading {
-          0%{background-position:0% 50%}
-          50%{background-position:100% 50%}
-          100%{background-position:0% 50%}
-        }
-        .date .loading {
-          max-width: 100%;
-          height: 24px;
-          border-radius: 4px;
-          display: inline-block;
-          background: linear-gradient(270deg, #D1D1D1, #EAEAEA);
-          background-size: 200% 200%;
-          animation: Loading 2s ease infinite;
+          flex-direction: row;
+          justify-content: space-evenly;
         }
         .card {
-          padding: 18px 18px 24px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items:center;
+          padding: 18px 18px 18px;
+          margin: 50px;
           width: 220px;
-          text-align: left;
+          height: 280px;
           text-decoration: none;
           color: #434343;
-          border: 1px solid #9b9b9b;
+          border:2px solid #067df7;
+          background: #F0F8FF;
+          box-shadow:5px 5px 2px grey;
         }
         .card:hover {
+          background: #87CEFA;
           border-color: #067df7;
         }
         .card h3 {
           margin: 0;
           color: #067df7;
-          font-size: 18px;
+          font-size: 28px;
+          text-align:center;
         }
         .card p {
           margin: 0;
           padding: 12px 0 0;
+          text-align:center;
           font-size: 13px;
           color: #333;
+        }
+        .footer {
+          padding-top: 30px;
+        }
+        .footer h3 {
+          font-size: 15px;
         }
       `}</style>
     </div>

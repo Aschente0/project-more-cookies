@@ -3,9 +3,6 @@ import io from 'socket.io-client';
 import Router from 'next/router';
 import secureTemplate from '../static/secure-template';
 
-/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
-
-
 class Broadcaster extends Component {
     componentDidMount(){
         let canvasComp = document.getElementById('canvas');
@@ -105,7 +102,7 @@ class Broadcaster extends Component {
                 drawToCanvas();
                 console.log("1) BROADCASTER EMITS broadcaster");
                 console.log(this.props);
-                this.socket.emit('broadcaster', recipe.title, this.props.loggedInUser.nickname);
+                this.socket.emit('broadcaster', recipe, this.props.loggedInUser.nickname);
             })
             .catch(function (err) {
                 console.log(err);
