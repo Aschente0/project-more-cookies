@@ -76,7 +76,7 @@ streamio.use((socket, next) => {
 });
 
 //restrict domain to my app only
-io.origins(['https://aqueous-coast-40978.herokuapp.com/']);
+// io.origins(['https://aqueous-coast-40978.herokuapp.com/']);
 
 streamio.on('connection', socket => {
   socket.on('broadcaster', (recipe, name) =>{

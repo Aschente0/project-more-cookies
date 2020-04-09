@@ -28,10 +28,10 @@ class RecipeWiki extends Component {
             document.getElementById('search').reset();
             console.log(data);
 
-            // fetch('api/recipe')
-            fetch(`https://api.spoonacular.com/recipes/search?query=${data}&instructionsRequired=true&apiKey=${apiKey}`, {
-                method: 'GET',
-            })
+            fetch('api/recipe')
+            // fetch(`https://api.spoonacular.com/recipes/search?query=${data}&instructionsRequired=true&apiKey=${apiKey}`, {
+            //     method: 'GET',
+            // })
                 .then(function(response){
                     response.json().then(function(data){
                         console.log(data);
@@ -61,10 +61,10 @@ class RecipeWiki extends Component {
                         data.results.forEach(result => {
                             let card = document.getElementById(result.id);
                             card.addEventListener("click", function(event){
-                                // fetch('api/recipeFocus')
-                                fetch(`https://api.spoonacular.com/recipes/${result.id}/information?apiKey=${apiKey}`, {
-                                    method: 'GET',
-                                })
+                                fetch('api/recipeFocus')
+                                // fetch(`https://api.spoonacular.com/recipes/${result.id}/information?apiKey=${apiKey}`, {
+                                //     method: 'GET',
+                                // })
                                 .then(function(response){
                                     response.json().then(function (data) {
                                         console.log(data);
