@@ -1,12 +1,16 @@
-#Title: Cookies
-#Members: Yuk-Ming (Carlos) Lam
-#Description:
+# Title: Cookies
+
+## Members:
+Yuk-Ming (Carlos) Lam
+
+## Description:
 A social media app/platform that offers two main functionalities.
 The first is a broadcasting functionality; a user would begin by searching for recipes, selecting one that will be the topic of the stream. The stream will begin immediately upon choosing the recipe, and the streamer will be taken to a new page composed of the stream, as well as the instructions of the recipe on the side.
 The second is a watching functionality; a user who intends to watch a stream will begin by selecting a stream from a list of streams available. Choosing one allows the user to watch the stream, as well as communicate to the streamer and other viewers through a message component. The message component is not displayed in a chat, but rather shows up on the video stream as a text message displayed on the top-left corner of the stream. The message is also synthesized into speech, allowing both the streamers and the viewers to hear the message. 
 
-#Documentation:
-#Authentication (Auth0 and JWT). The endpoint to fetch the public key can be used like:
+## Documentation:
+## Authentication (Auth0 and JWT).
+The endpoint to fetch the public key can be used like:
     - example: ```curl --verbose --request GET https://raspy-silence-2106.auth0.com/.well-known/jwks.json```
     - response body: `{
     "keys": [
@@ -25,8 +29,8 @@ The second is a watching functionality; a user who intends to watch a stream wil
     ]
 }`
 
-#Socket.io:
-URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
+## Socket.io:
+### URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
 socket.on('watcher', ...)
     -parameters:
         -id (string): the id of the socket of the watcher
@@ -53,7 +57,7 @@ socket.on('dc', ...)
     -parameters:
         -id (string): the id of the socket that disconnected
 
-URL: `https://aqueous-coast-40978.herokuapp.com/watcher` (under namespace '/stream')
+### URL: `https://aqueous-coast-40978.herokuapp.com/watcher` (under namespace '/stream')
 socket.on('broadcaster')
     -parameters: none
     -emits:
@@ -87,7 +91,7 @@ socket.on('dc', ...)
     -parameters:
         -broadcast (string): the id of the socket of broadcaster disconnecting
 
-SERVER (under namespace '/stream'):
+### SERVER (under namespace '/stream'):
 socket.on('broadcaster', ...)
     -parameters:
         -recipe (object): information about the recipe in the stream
