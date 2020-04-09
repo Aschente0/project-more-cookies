@@ -6,7 +6,7 @@ const Nav = ({ isLoggedIn }) => (
     <nav>
       <ul>
         <li><Link href="/"><a>Home</a></Link></li>
-        { isLoggedIn ? ( <li><Link href="/profile"><a>Profile</a></Link></li> ) : ( <li><Link href="/login"><a>Login</a></Link></li> ) }
+        { isLoggedIn ? ("") : ( <li><Link href="/login"><a>Login</a></Link></li> ) }
         { isLoggedIn ? ( <li><Link href="/logout"><a>Logout</a></Link></li> ) : ( '' ) }
       </ul>
       <style jsx>{`
