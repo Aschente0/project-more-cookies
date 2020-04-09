@@ -27,6 +27,8 @@ const Credits = () => {
                     <li><a href="https://devcenter.heroku.com/">Heroku</a> for deployment, with help from <a href="https://medium.com/@shalandy/deploy-git-subdirectory-to-heroku-ea05e95fce1f">Shalandy Zhang</a></li>
                     <li>STUN/TURN servers by <a href="https://www.twilio.com/">Twilio</a></li>
                     <li>General/Debugging help from <a href="https://stackoverflow.com/">Stackoverflow</a> and <a href="https://www.w3schools.com/">w3schools</a></li>
+                    <li>Learning about jsonwebtoken from <a href="https://auth0.com/learn/json-web-tokens/">auth0 docs</a> and <a href="https://redthunder.blog/2017/06/08/jwts-jwks-kids-x5ts-oh-my/">RedThunder.Blog</a> </li>
+                    <li>Guide to retrieving JWKS from endpoints from <a href="https://www.npmjs.com/package/jwks-rsa">npmjs</a></li>
                     <li>Procfile by <a href="https://github.com/chrling">Chris Ling</a></li>
                 </ul>
             </div>

@@ -24,11 +24,14 @@ class RecipeWiki extends Component {
         search.addEventListener('submit', (event) => {
             event.preventDefault();
             this.toggle();
-            let data = document.querySelector('#data').value;
+            let data = document.querySelector('#data').value.toString();
             document.getElementById('search').reset();
             console.log(data);
 
-            const res = fetch('api/recipe')
+            // fetch('api/recipe')
+            fetch(`https://api.spoonacular.com/recipes/search?query=${data}&instructionsRequired=true&apiKey=${apiKey}`, {
+                method: 'GET',
+            })
                 .then(function(response){
                     response.json().then(function(data){
                         console.log(data);
@@ -42,12 +45,14 @@ class RecipeWiki extends Component {
                             let imageUrl = result.image;
                             console.log(baseUri + imageUrl);
                             recipe.innerHTML = recipe.innerHTML + `
-                            <div id="${result.id}" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;background: #F0F8FF;">
-                                <img src="${baseUri + imageUrl}" height="200" style="padding-right:50px;"/>
-                                <div style="display:flex;flex-direction:column;">
-                                    <div style="padding-bottom:68px;font-size:30px;;">${result.title}</div>
-                                    <div style="padding-bottom:10px">Preparation time: ${result.readyInMinutes}</div>
-                                    <div>Number of servings: ${result.servings}</div>
+                            <div id="${result.id}" onMouseOver="this.style.background='#87CEFA';" onMouseOut="this.style.background='#F0F8FF';" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;background: #F0F8FF;">
+                                <img src="${baseUri + imageUrl}" height="200" style="border:1px solid #067df7;box-shadow: 2px 2px 1px grey;"/>
+                                <div style="display:flex;flex-direction:column;justify-content:space-between;padding-left:20px;padding-top:10px;padding-bottom:10px;">
+                                    <div style="padding-bottom:68px;font-size:30px;">${result.title}</div>
+                                    <div>
+                                        <div style="padding-bottom:10px">Preparation time: ${result.readyInMinutes}</div>
+                                        <div>Number of servings: ${result.servings}</div>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -56,7 +61,10 @@ class RecipeWiki extends Component {
                         data.results.forEach(result => {
                             let card = document.getElementById(result.id);
                             card.addEventListener("click", function(event){
-                                fetch('api/recipeFocus')
+                                // fetch('api/recipeFocus')
+                                fetch(`https://api.spoonacular.com/recipes/${result.id}/information?apiKey=${apiKey}`, {
+                                    method: 'GET',
+                                })
                                 .then(function(response){
                                     response.json().then(function (data) {
                                         console.log(data);

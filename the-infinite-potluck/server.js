@@ -1,5 +1,3 @@
-/***** help from https://github.com/Basscord/webrtc-video-broadcast *****/
-
 const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -15,16 +13,74 @@ let broadcasters = {};
 
 const accountSid = 'AC5bf0645d5c285488bb95eaa4734b81ec';
 const authToken = '6f07cbd3b85f1f5ece686e1597c4852c';
-const client = require('twilio')(accountSid, authToken);
+const twilioClient = require('twilio')(accountSid, authToken);
 const config = {};
-client.tokens.create().then(token => {
+twilioClient.tokens.create().then(token => {
   config.iceServers = token.iceServers;
 });
 
-/* COMMUNICATION CHANNEL MULTIPLEXING */
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
+//middleware function to check jwt
+const client = jwksClient({
+  cache: true,
+  cacheMaxEntries: 10,
+  rateLimit: true,
+  jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
+ 
+  // audience: `https://dev-572t65wb.auth0.com/api/v2/`,
+  // issuer: `https://dev-572t65wb.auth0.com`,
+  // algorithms: ['RS256']
+});
 
 /* STREAMING COMMUNICATION CHANNEL */
 const streamio = io.of('/stream');
+
+
+// middleware to verify that the connecting user has a valid JWT
+streamio.use((socket, next) => {
+  let handshakeData = socket.request;
+  if (handshakeData && handshakeData.headers.cookie) {
+    let cookie = handshakeData.headers.cookie;
+    console.log(cookie);
+
+    let hasToken = cookie.lastIndexOf('jwtToken=');
+    
+    //if no token, prevent connection
+    if(hasToken == -1) {
+      next(new Error('not authorized'));
+    }
+
+    // index starts inclusive of string 'jwtToken='; +9 chars for start of token
+    let index_beg = hasToken + 9;
+
+    // ending index of token
+    let index_end = cookie.indexOf(';', index_beg);
+
+    let jwtToken = cookie.substring(index_beg, index_end);
+    console.log("JWT TOKEN: " + jwtToken);
+
+    let decodedToken = jwt.decode(jwtToken, { complete: true });
+    let kid = decodedToken.header.kid;
+    let signingKey;
+    client.getSigningKey(kid, (err, key) => {
+      signingKey = key.getPublicKey();
+      console.log("SIGNING KEY: " + signingKey);
+      try {
+        jwt.verify(jwtToken, signingKey);
+        console.log("VERIFIED");
+        next();
+      } catch (error) {
+        console.log("NOT VERIFIED");
+        next(new Error('not authorized'));
+      }
+    });
+  }
+});
+
+//restrict domain to my app only
+streamio.origins(['ueous-coast-40978.herokuapp.com']);
+
 streamio.on('connection', socket => {
   socket.on('broadcaster', (recipe, name) =>{
       let broadcaster = socket.id;
@@ -88,15 +144,6 @@ streamio.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log("SERVER RECEIVED DISCONNECT: " + socket.id);
-    // if (socket.id in Object.keys(broadcasters)){
-    //   Object.keys(broadcasters).forEach((broadcaster) => {
-    //     socket.to(broadcaster).emit('dc', socket.id);
-    //   });
-    // }
-    // else {
-    //   delete broadcasters[socket.id];
-    //   socket.broadcast.emit('dc', socket.id);
-    // }
     console.log("BROADCASTERS BEFORE DISCONNECT: " + Object.keys(broadcasters));
     console.log("BROADCASTER TO DELETE: " + socket.id);
     if (socket.id in broadcasters){
@@ -109,15 +156,6 @@ streamio.on('connection', socket => {
   });
 });
 
-/* RECIPE COLLABORATION COMMUNICATION CHANNEL */
-const recipeio = io.of('/recipe');
-recipeio.on('connection', socket => {
-  console.log("CONNECTION RECEIVED");
-  socket.on('message', (data) => {
-    console.log("2) SERVER RECEIVES message AND RELAYS");
-    socket.broadcast.emit('message', data);
-  });
-});
 
 nextApp.prepare().then(() => {
   app.get('*', (req, res) => {
