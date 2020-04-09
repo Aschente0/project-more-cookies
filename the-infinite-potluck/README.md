@@ -34,7 +34,7 @@ The endpoint to fetch the public key can be used like:
 
 ## Socket.io:
 ### URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
-socket.on('watcher', ...)
+**socket.on('watcher', ...)**
 - parameters:
     - id (string): the id of the socket of the watcher
     - config (object): configuration containing key 'iceServers' with an array of strings as the value
@@ -42,7 +42,7 @@ socket.on('watcher', ...)
         - 'recipe_data'
         - 'candidate'
 
-socket.on('answer', ...)
+**socket.on('answer', ...)**
 - parameters:
     - id (string): the id of the socket of the watcher
     - description (RTCSessionDescription): value specifying the watcher peer's answer
