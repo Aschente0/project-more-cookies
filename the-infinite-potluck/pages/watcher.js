@@ -56,6 +56,7 @@ class Watcher extends Component {
         // on message submission, emit steam_popup signal
         messageBox.addEventListener("click", event => {
             let message = data.value;
+            document.getElementById('form').reset();
             console.log(message);
             //params: signal, broadcast id to emit to, message
             this.socket.emit('stream_popup', currBroadcast, message);
