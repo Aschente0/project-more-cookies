@@ -15,46 +15,46 @@ The endpoint to fetch the public key can be used like:
 - response body:
 ```javascript
     {
-    "keys": [
-        {
-            "alg": "RS256",
-            "kty": "RSA",
-            "use": "sig",
-            "n": "q8LhgmlgK_VptnKCW3jaNKl96FA4sIZAfqIpa6hv4gSKmAs_xFj4BKNS4ye0Tsl1Z_8mrcxCKDkfZPSx0Qgq5dfp20gBys33Jw1hh5YpNBDjcdbHvrcif-klWi5cWmeH3s9MJMc3gP9eLeg54BTR8jFvm0pTknSmDl4izW4jsJLgtE8GEXZ4wIlJ1bsk1EmIzwCz-8aSjUCohTRWJEBCZGr7LYqUGEc01j0EBhToUgFOCxiPneBWsEXbCN8ADkuWNy_s16dbN8-qjd3b9DBtAIhIO4TS8XLilic2GUpbdWVHwzKMowe7ooAw_WfcTpJt9NEP7x38eyY8NL3NEX2BXQ",
-            "e": "AQAB",
-            "kid": "OEVFRUZGQzY0MEVFRDBBMTdFREVDQTE5QzZGMTM1QTk4NTZFODVGQw",
-            "x5t": "OEVFRUZGQzY0MEVFRDBBMTdFREVDQTE5QzZGMTM1QTk4NTZFODVGQw",
-            "x5c": [
-                "MIIDBzCCAe+gAwIBAgIJD0vtZRKOQ4n4MA0GCSqGSIb3DQEBCwUAMCExHzAdBgNVBAMTFmRldi01NzJ0NjV3Yi5hdXRoMC5jb20wHhcNMjAwMzE4MDIxODI0WhcNMzMxMTI1MDIxODI0WjAhMR8wHQYDVQQDExZkZXYtNTcydDY1d2IuYXV0aDAuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq8LhgmlgK/VptnKCW3jaNKl96FA4sIZAfqIpa6hv4gSKmAs/xFj4BKNS4ye0Tsl1Z/8mrcxCKDkfZPSx0Qgq5dfp20gBys33Jw1hh5YpNBDjcdbHvrcif+klWi5cWmeH3s9MJMc3gP9eLeg54BTR8jFvm0pTknSmDl4izW4jsJLgtE8GEXZ4wIlJ1bsk1EmIzwCz+8aSjUCohTRWJEBCZGr7LYqUGEc01j0EBhToUgFOCxiPneBWsEXbCN8ADkuWNy/s16dbN8+qjd3b9DBtAIhIO4TS8XLilic2GUpbdWVHwzKMowe7ooAw/WfcTpJt9NEP7x38eyY8NL3NEX2BXQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRG2zKm/nafWGdkEM2qS/jGkTgO9TAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAIYMgTyzCXZFXfEDvQnoWy4axYe+ESa3qiGCEbjc63Syd8wRVsDCtkFRC72qVK35bd4ihpTgbN7XHEYi8Tfh4zLF3ndNAba348gcOz0rjk6hrow8+8ZGh+GGrFuUBE/zSz8+Covhp7tANJYTG0AnrCerwStVVoN1wecbvuvmYAA93ZaPuu/s3Hso1WfXkcfQiTIun7kXK8bqoYWjHKXIEu49WtfQDl5q/c/X3z6R6eaOqMunRk02wwqISRIsBOnDJxkqRecd7qKjLJ+u0spoWztgevlHm/VS1hG+XMBnpW3RBp+GJttAQZ+ut9bXxXhA5Yk2/l8xJsKhmYecHOmoWnU="
-            ]
-        }
-    ]
+        "keys": [
+            {
+                "alg": "RS256",
+                "kty": "RSA",
+                "use": "sig",
+                "n": "q8LhgmlgK_VptnKCW3jaNKl96FA4sIZAfqIpa6hv4gSKmAs_xFj4BKNS4ye0Tsl1Z_8mrcxCKDkfZPSx0Qgq5dfp20gBys33Jw1hh5YpNBDjcdbHvrcif-klWi5cWmeH3s9MJMc3gP9eLeg54BTR8jFvm0pTknSmDl4izW4jsJLgtE8GEXZ4wIlJ1bsk1EmIzwCz-8aSjUCohTRWJEBCZGr7LYqUGEc01j0EBhToUgFOCxiPneBWsEXbCN8ADkuWNy_s16dbN8-qjd3b9DBtAIhIO4TS8XLilic2GUpbdWVHwzKMowe7ooAw_WfcTpJt9NEP7x38eyY8NL3NEX2BXQ",
+                "e": "AQAB",
+                "kid": "OEVFRUZGQzY0MEVFRDBBMTdFREVDQTE5QzZGMTM1QTk4NTZFODVGQw",
+                "x5t": "OEVFRUZGQzY0MEVFRDBBMTdFREVDQTE5QzZGMTM1QTk4NTZFODVGQw",
+                "x5c": [
+                    "MIIDBzCCAe+gAwIBAgIJD0vtZRKOQ4n4MA0GCSqGSIb3DQEBCwUAMCExHzAdBgNVBAMTFmRldi01NzJ0NjV3Yi5hdXRoMC5jb20wHhcNMjAwMzE4MDIxODI0WhcNMzMxMTI1MDIxODI0WjAhMR8wHQYDVQQDExZkZXYtNTcydDY1d2IuYXV0aDAuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq8LhgmlgK/VptnKCW3jaNKl96FA4sIZAfqIpa6hv4gSKmAs/xFj4BKNS4ye0Tsl1Z/8mrcxCKDkfZPSx0Qgq5dfp20gBys33Jw1hh5YpNBDjcdbHvrcif+klWi5cWmeH3s9MJMc3gP9eLeg54BTR8jFvm0pTknSmDl4izW4jsJLgtE8GEXZ4wIlJ1bsk1EmIzwCz+8aSjUCohTRWJEBCZGr7LYqUGEc01j0EBhToUgFOCxiPneBWsEXbCN8ADkuWNy/s16dbN8+qjd3b9DBtAIhIO4TS8XLilic2GUpbdWVHwzKMowe7ooAw/WfcTpJt9NEP7x38eyY8NL3NEX2BXQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRG2zKm/nafWGdkEM2qS/jGkTgO9TAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAIYMgTyzCXZFXfEDvQnoWy4axYe+ESa3qiGCEbjc63Syd8wRVsDCtkFRC72qVK35bd4ihpTgbN7XHEYi8Tfh4zLF3ndNAba348gcOz0rjk6hrow8+8ZGh+GGrFuUBE/zSz8+Covhp7tANJYTG0AnrCerwStVVoN1wecbvuvmYAA93ZaPuu/s3Hso1WfXkcfQiTIun7kXK8bqoYWjHKXIEu49WtfQDl5q/c/X3z6R6eaOqMunRk02wwqISRIsBOnDJxkqRecd7qKjLJ+u0spoWztgevlHm/VS1hG+XMBnpW3RBp+GJttAQZ+ut9bXxXhA5Yk2/l8xJsKhmYecHOmoWnU="
+                ]
+            }
+        ]
     }
 ```
 
 ## Socket.io:
 ### URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
 socket.on('watcher', ...)
-    -parameters:
-        -id (string): the id of the socket of the watcher
-        -config (object): configuration containing key 'iceServers' with an array of strings as the value
-    -emits:
-        -'recipe_data'
-        -'candidate'
+- parameters:
+    - id (string): the id of the socket of the watcher
+    - config (object): configuration containing key 'iceServers' with an array of strings as the value
+    - emits:
+        - 'recipe_data'
+        - 'candidate'
 
 socket.on('answer', ...)
-    -parameters:
-        -id (string): the id of the socket of the watcher
-        -description (RTCSessionDescription): value specifying the watcher peer's answer
+- parameters:
+    - id (string): the id of the socket of the watcher
+    - description (RTCSessionDescription): value specifying the watcher peer's answer
 
 socket.on('candidate', ...)
-    -parameters:
-        -id (string): the id of the socket of the watcher
-        -candidate (RTCIceCandidateInit): information about the candidate
+- parameters:
+    - id (string): the id of the socket of the watcher
+    - candidate (RTCIceCandidateInit): information about the candidate
 
 socket.on('stream_popup', ...)
-    -parameters:
-        -message (string): the string message to be displayed on the video stream
+- parameters:
+    - message (string): the string message to be displayed on the video stream
 
 socket.on('dc', ...)
     -parameters:
