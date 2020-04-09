@@ -16,11 +16,11 @@ const Credits = () => {
                 </ul>
                 <h2>Coding</h2>
                 <ul>
-                    <li>Next.js framework <a href="https://nextjs.org/docs">docs</a></li>
+                    <li>Next.js framework <a href="https://nextjs.org/docs">docs</a> as well as starter template UI</li>
                     <li>WebRTC API <a href="https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection">docs</a></li>
                     <li>Socket.io <a href="https://socket.io/docs/">docs</a> for much of the websocket signalling</li>
                     <li>WebRTC and Socket.io example from <a href="https://github.com/Basscord/webrtc-video-broadcast">github</a></li>
-                    <li>Auth0 authentication with JWT template by <a href="https://blog.fullstacktraining.com/using-next-js-and-auth0/">Tamas Piros</a></li>
+                    <li>Auth0 and JWT login authentication with JWT template by <a href="https://blog.fullstacktraining.com/using-next-js-and-auth0/">Tamas Piros</a></li>
                     <li>Text-to-speech API <a href="https://usefulangle.com/post/98/javascript-text-to-speech">docs</a></li>
                     <li>Spoonacular API <a href="https://spoonacular.com/food-api/docs">docs</a></li>
                     <li>Real-time video manipulation tutorials from <a href="https://spoonacular.com/food-api/docs">deepstream.io</a></li>
