@@ -11,8 +11,8 @@ The second is a watching functionality; a user who intends to watch a stream wil
 ## Documentation:
 ## Authentication (Auth0 and JWT).
 The endpoint to fetch the public key can be used like:
-    - example: ```curl --verbose --request GET https://raspy-silence-2106.auth0.com/.well-known/jwks.json```
-    - response body: `{
+- example: ```curl --verbose --request GET https://raspy-silence-2106.auth0.com/.well-known/jwks.json```
+- response body: `{
     "keys": [
         {
             "alg": "RS256",
