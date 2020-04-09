@@ -26,11 +26,8 @@ const client = jwksClient({
   cache: true,
   cacheMaxEntries: 10,
   rateLimit: true,
-  jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
- 
-  // audience: `https://dev-572t65wb.auth0.com/api/v2/`,
-  // issuer: `https://dev-572t65wb.auth0.com`,
-  // algorithms: ['RS256']
+  // jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
+  jwksUri: `https://raspy-silence-2106.auth0.com/.well-known/jwks.json.`
 });
 
 /* STREAMING COMMUNICATION CHANNEL */
