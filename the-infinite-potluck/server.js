@@ -27,7 +27,7 @@ const client = jwksClient({
   cacheMaxEntries: 10,
   rateLimit: true,
   // jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
-  jwksUri: `https://raspy-silence-2106.auth0.com/.well-known/jwks.json.`
+  jwksUri: `https://raspy-silence-2106.auth0.com/.well-known/jwks.json`
 });
 
 /* STREAMING COMMUNICATION CHANNEL */
