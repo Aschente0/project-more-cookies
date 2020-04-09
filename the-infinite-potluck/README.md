@@ -38,7 +38,7 @@ The endpoint to fetch the public key can be used like:
 - parameters:
     - id (string): the id of the socket of the watcher
     - config (object): configuration containing key 'iceServers' with an array of strings as the value
-    - emits:
+- emits:
         - 'recipe_data'
         - 'candidate'
 
@@ -47,120 +47,120 @@ The endpoint to fetch the public key can be used like:
     - id (string): the id of the socket of the watcher
     - description (RTCSessionDescription): value specifying the watcher peer's answer
 
-socket.on('candidate', ...)
+**socket.on('candidate', ...)**
 - parameters:
     - id (string): the id of the socket of the watcher
     - candidate (RTCIceCandidateInit): information about the candidate
 
-socket.on('stream_popup', ...)
+**socket.on('stream_popup', ...)**
 - parameters:
     - message (string): the string message to be displayed on the video stream
 
-socket.on('dc', ...)
-    -parameters:
-        -id (string): the id of the socket that disconnected
+**socket.on('dc', ...)**
+- parameters:
+    - id (string): the id of the socket that disconnected
 
 ### URL: `https://aqueous-coast-40978.herokuapp.com/watcher` (under namespace '/stream')
-socket.on('broadcaster')
-    -parameters: none
-    -emits:
-        -'watcher'
+**socket.on('broadcaster')**
+- parameters: none
+- emits:
+    - 'watcher'
 
-socket.on('stream_choice', ...)
-    -parameters:
-        -broadcasters (object): key/value pairs with the socket id of a broadcaster as the key, and an array of size 2 with the first index as a recipe (json) object and second index the name (string) of the broadcaster
-    -emits:
-        'stream_chosen'
+**socket.on('stream_choice', ...)**
+- parameters:
+    - broadcasters (object): key/value pairs with the socket id of a broadcaster as the key, and an array of size 2 with the first index as a recipe (json) object and second index the name (string) of the broadcaster
+- emits:
+    - 'stream_chosen'
 
-socket.on('candidate', ...)
-    -parameters:
-        -id (string): the id of the socket of the broadcaster
-        -candidate (RTCIceCandidateInit): information about the candidate
+**socket.on('candidate', ...)**
+- parameters:
+    - id (string): the id of the socket of the broadcaster
+    - candidate (RTCIceCandidateInit): information about the candidate
 
-socket.on('recipe_data', ...)
-    -parameters:
-        -data (object): information about the recipe for the stream
+**socket.on('recipe_data', ...)**
+- parameters:
+    - data (object): information about the recipe for the stream
 
-socket.on('stream_data', ...)
-    -parameters:
-        -viewCount (string): the number of viewers watching the stream
+**socket.on('stream_data', ...)**
+- parameters:
+    - viewCount (string): the number of viewers watching the stream
 
-socket.on('message_synth', ...)
-    -parameters:
-        -id (string): the id of the socket of the broadcaster
-        -message (string): the message to be synthesized (text-to-speech)
+**socket.on('message_synth', ...)**
+- parameters:
+    - id (string): the id of the socket of the broadcaster
+    - message (string): the message to be synthesized (text-to-speech)
 
-socket.on('dc', ...)
-    -parameters:
-        -broadcast (string): the id of the socket of broadcaster disconnecting
+**socket.on('dc', ...)**
+- parameters:
+    - broadcast (string): the id of the socket of broadcaster disconnecting
 
 ### SERVER (under namespace '/stream'):
-socket.on('broadcaster', ...)
-    -parameters:
-        -recipe (object): information about the recipe in the stream
-        -name (string): name of the broadcaster
-    -emits:
-        -'broadcaster'
+**socket.on('broadcaster', ...)**
+- parameters:
+    - recipe (object): information about the recipe in the stream
+    - name (string): name of the broadcaster
+- emits:
+    - 'broadcaster'
 
-socket.on('watcher', ...)
-    -parameters: none
-    -emits:
-        -'stream_choice'
+**socket.on('watcher', ...)**
+- parameters: none
+- emits:
+    - 'stream_choice'
 
-socket.on('stream_chosen', ...)
-    -parameters:
-        -broadcaster (string): id of the socket of the broadcaster
-    -emits:
-        -'watcher'
+**socket.on('stream_chosen', ...)**
+- parameters:
+    - broadcaster (string): id of the socket of the broadcaster
+- emits:
+    - 'watcher'
 
-socket.on('offer', ...)
-    -parameters:
-        -id (string): the id of the socket of the peer
-    -emits:
-        -'offer'
+**socket.on('offer', ...)**
+- parameters:
+    - id (string): the id of the socket of the peer
+- emits:
+    - 'offer'
 
-socket.on('answer', ...)
-    -parameters:
-        -id (string): the id of the socket of the peer
-        -message (RTCSessionDescription): the local description of the RTCPeerConnection
-    -emits:
-        -'answer'
+**socket.on('answer', ...)**
+- parameters:
+    - id (string): the id of the socket of the peer
+    - message (RTCSessionDescription): the local description of the RTCPeerConnection
+- emits:
+    - 'answer'
 
-socket.on('candidate', ...)
-    -parameters:
-        -id (string): id of the socket of the peer
-        -message (RTCIceCandidate): the candidate of the RTCPeerConnectionIceEvent
-    -emits:
-        -'candidate'
+**socket.on('candidate', ...)**
+- parameters:
+    - id (string): id of the socket of the peer
+    - message (RTCIceCandidate): the candidate of the RTCPeerConnectionIceEvent
+- emits:
+    - 'candidate'
 
-socket.on('stream_popup', ...)
-    -parameters:
-        -id (string): id of the socket of the peer
-        -message (string): the string message for the popup
-    -emits:
-        -'stream_popup'
+**socket.on('stream_popup', ...)**
+- parameters:
+    - id (string): id of the socket of the peer
+    - message (string): the string message for the popup
+- emits:
+    - 'stream_popup'
 
-socket.on('recipe_data', ...)
-    -parameters:
-        -id (string): id of the socket of the peer
-        -data (object): the information of the recipe for the stream
-    -emits:
-        -'recipe_data'
+**socket.on('recipe_data', ...)**
+- parameters:
+    - id (string): id of the socket of the peer
+    - data (object): the information of the recipe for the stream
+- emits:
+    - 'recipe_data'
 
-socket.on('message_synth', ...)
-    -parameters:
-        -message (string): the message to be synthesized
-    -emits:
-        -'message_synth'
+**socket.on('message_synth', ...)**
+- parameters:
+    - message (string): the message to be synthesized
+- emits:
+    - 'message_synth'
 
-socket.on('stream_data', ...)
-    -parameters:
-        -watchers (string[]): an array of ids for each socket of watchers viewing the stream
-        -viewcount (string): number of viewers watching the stream
-    -emits:
-        -'stream_data'
+**socket.on('stream_data', ...)**
+- parameters:
+    - watchers (string[]): an array of ids for each socket of watchers viewing the stream
+    - viewcount (string): number of viewers watching the stream
+- emits:
+    - 'stream_data'
 
-socket.on('disconnect', ...)
-    -parameters: none
-    -emits:
-        -'dc'
+**socket.on('disconnect', ...)**
+- parameters: none
+- emits:
+    - 'dc'
