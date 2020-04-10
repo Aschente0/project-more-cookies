@@ -165,4 +165,4 @@ The endpoint to fetch the public key can be used like:
 - emits:
     - 'dc'
 
-![](/WebRTC%20diagram.html)
+![](WebRTC%20diagram.html)
