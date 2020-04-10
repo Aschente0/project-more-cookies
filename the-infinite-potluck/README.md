@@ -55,6 +55,8 @@ The endpoint to fetch the public key can be used like:
 The authentication happens when the user is redirected to Auth0 and redirected back to the main page of the app after logging in. The user returns with a JWT that is then stored in the cookies of the browser. A wrapper template is wrapped around all pages, which verifies that the JWT is valid (essentially becoming authorization). This is done by the boiler-plate code and templates mentioned in the credits page, as well as the auth0 and jsonwebtoken packages used. The JWT is further used to secure the Socket.io connections by applying middleware to the connections, verifying that the JWT is valid once again. The verification mentioned is done by retrieving a public key through the Auth0 endpoint for the domain of the app, and used to check against the certificate.
 
 ## Socket.io:
+See diagram.png for a general overview of how the connection is established (excluding stream_pop and message_synth).
+
 ### URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
 **socket.on('watcher', ...)**
 - parameters:
