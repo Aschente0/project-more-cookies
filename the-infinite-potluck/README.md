@@ -173,4 +173,6 @@ Swap out the commented lines of code from the following:
 2. Change the redirectUri under ./static/auth0.js
 3. Change the jwksUri endpoint under ./server.js
 
+The allowed domain is ```http://localhost:3000```
+
 To test out the app without hitting the Spoonacular API, swap in the 2 commented fetch() functions (line 30, line 61) under ./pages/recipeWiki.js
