@@ -167,3 +167,10 @@ The endpoint to fetch the public key can be used like:
 
 See diagram.png for a general overview of how the connection is established (excluding stream_pop and message_synth).
 
+## To test locally:
+Swap out the commented lines of code from the following:
+1. Change the clientID and domain under ./settings.js
+2. Change the redirectUri under ./static/auth0.js
+3. Change the jwksUri endpoint under ./server.js
+
+To test out the app without hitting the Spoonacular API, swap in the 2 commented fetch() functions (line 30, line 61) under ./pages/recipeWiki.js
