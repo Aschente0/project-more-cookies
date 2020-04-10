@@ -3,10 +3,24 @@
 ## Members:
 Yuk-Ming (Carlos) Lam
 
+## URLs
+App: ```https://aqueous-coast-40978.herokuapp.com/```
+Youtube Demo: ```https://www.youtube.com/watch?v=JeW5ip-DwZE```
+
 ## Description:
 A social media app/platform that offers two main functionalities.
 The first is a broadcasting functionality; a user would begin by searching for recipes, selecting one that will be the topic of the stream. The stream will begin immediately upon choosing the recipe, and the streamer will be taken to a new page composed of the stream, as well as the instructions of the recipe on the side.
 The second is a watching functionality; a user who intends to watch a stream will begin by selecting a stream from a list of streams available. Choosing one allows the user to watch the stream, as well as communicate to the streamer and other viewers through a message component. The message component is not displayed in a chat, but rather shows up on the video stream as a text message displayed on the top-left corner of the stream. The message is also synthesized into speech, allowing both the streamers and the viewers to hear the message. 
+
+## Technologies Used:
+Node.js back-end
+Next.js React framework for front-end
+Auth0 with JWT for authentication (boiler-plate code credited in Credits page)
+Spoonacular API for recipes
+WebRTC for p2p live streaming
+Socket.io for signaling
+Twilio's services for STUN/TURN servers to guarantee peer connections
+Heroku for deployment
 
 ## Documentation:
 ## Authentication (Auth0 and JWT):
@@ -31,6 +45,7 @@ The endpoint to fetch the public key can be used like:
         ]
     }
 ```
+The authentication happens when the user is redirected to Auth0 and redirected back to the main page of the app after logging in. The user returns with a JWT that is then stored in the cookies of the browser. A wrapper template is wrapped around all pages, which verifies that the JWT is valid (essentially becoming authorization). This is done by the boiler-plate code and templates mentioned in the credits page, as well as the auth0 and jsonwebtoken packages used. The JWT is further used to secure the Socket.io connections by applying middleware to the connections, verifying that the JWT is valid once again. The verification mentioned is done by retrieving a public key through the Auth0 endpoint for the domain of the app, and used to check against the certificate.
 
 ## Socket.io:
 ### URL: `https://aqueous-coast-40978.herokuapp.com/broadcaster` (under namespace '/stream')
