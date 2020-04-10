@@ -106,9 +106,9 @@ class Watcher extends Component {
             
         };
 
-        // this.socket.on('connect', () => {
-        //     this.socket.emit('watcher');
-        // });
+        this.socket.on('connect', () => {
+            this.socket.emit('watcher');
+        });
         
         this.socket.on('broadcaster', () => {
             this.socket.emit('watcher');

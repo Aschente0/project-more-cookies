@@ -26,7 +26,6 @@ class RecipeWiki extends Component {
             this.toggle();
             let data = document.querySelector('#data').value.toString();
             document.getElementById('search').reset();
-            console.log(data);
 
             // fetch('api/recipe')
             fetch(`https://api.spoonacular.com/recipes/search?query=${data}&instructionsRequired=true&apiKey=${apiKey}`, {
@@ -34,7 +33,6 @@ class RecipeWiki extends Component {
             })
                 .then(function(response){
                     response.json().then(function(data){
-                        console.log(data);
                         // resulting array of data (recipes)
                         let recipe = document.getElementById('recipes');
                         // clear existing recipes
@@ -43,7 +41,6 @@ class RecipeWiki extends Component {
                         // populate recipe list with recipe overview cards
                         data.results.forEach(result => {
                             let imageUrl = result.image;
-                            console.log(baseUri + imageUrl);
                             recipe.innerHTML = recipe.innerHTML + `
                             <div id="${result.id}" onMouseOver="this.style.background='#87CEFA';" onMouseOut="this.style.background='#F0F8FF';" style="display:flex;flex-direction:row;margin-bottom:20px;border:2px solid #067df7;padding:3px;box-shadow: 5px 5px 2px grey;background: #F0F8FF;">
                                 <img src="${baseUri + imageUrl}" height="200" style="border:1px solid #067df7;box-shadow: 2px 2px 1px grey;"/>
@@ -67,8 +64,6 @@ class RecipeWiki extends Component {
                                 })
                                 .then(function(response){
                                     response.json().then(function (data) {
-                                        console.log(data);
-                                        console.log(data.title);
                                         //toggle elements
                                         document.getElementById('recipes').hidden = true;
                                         document.getElementById('indepthRecipe').hidden = false;
@@ -124,6 +119,7 @@ class RecipeWiki extends Component {
                                             `;
                                         });
 
+                                        //chosen recipe will be stored into local storage for the broadcasting step
                                         document.getElementById('chooseBtn').addEventListener("click", function(event) {
                                             localStorage.setItem('data', JSON.stringify(data));
                                         });
