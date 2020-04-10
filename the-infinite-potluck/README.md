@@ -14,12 +14,19 @@ The second is a watching functionality; a user who intends to watch a stream wil
 
 ## Technologies Used:
 Node.js back-end
+
 Next.js React framework for front-end
+
 Auth0 with JWT for authentication (boiler-plate code credited in Credits page)
+
 Spoonacular API for recipes
+
 WebRTC for p2p live streaming
+
 Socket.io for signaling
+
 Twilio's services for STUN/TURN servers to guarantee peer connections
+
 Heroku for deployment
 
 ## Documentation:
