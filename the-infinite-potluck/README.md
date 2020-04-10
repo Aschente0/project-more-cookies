@@ -9,7 +9,7 @@ The first is a broadcasting functionality; a user would begin by searching for r
 The second is a watching functionality; a user who intends to watch a stream will begin by selecting a stream from a list of streams available. Choosing one allows the user to watch the stream, as well as communicate to the streamer and other viewers through a message component. The message component is not displayed in a chat, but rather shows up on the video stream as a text message displayed on the top-left corner of the stream. The message is also synthesized into speech, allowing both the streamers and the viewers to hear the message. 
 
 ## Documentation:
-## Authentication (Auth0 and JWT).
+## Authentication (Auth0 and JWT):
 The endpoint to fetch the public key can be used like:
 - example: ```curl --verbose --request GET https://raspy-silence-2106.auth0.com/.well-known/jwks.json```
 - response body:
@@ -39,8 +39,8 @@ The endpoint to fetch the public key can be used like:
     - id (string): the id of the socket of the watcher
     - config (object): configuration containing key 'iceServers' with an array of strings as the value
 - emits:
-        - 'recipe_data'
-        - 'candidate'
+    - 'recipe_data'
+    - 'candidate'
 
 **socket.on('answer', ...)**
 - parameters:
