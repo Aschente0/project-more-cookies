@@ -165,4 +165,4 @@ The endpoint to fetch the public key can be used like:
 - emits:
     - 'dc'
 
-![](diagram.png)
+![](./diagram.png)
