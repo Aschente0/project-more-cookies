@@ -165,4 +165,5 @@ The endpoint to fetch the public key can be used like:
 - emits:
     - 'dc'
 
-![](./diagram.png)
+See diagram.png for a general overview of how the connection is established (excluding stream_pop and message_synth).
+

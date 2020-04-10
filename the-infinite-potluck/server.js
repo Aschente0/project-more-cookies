@@ -9,11 +9,14 @@ const nextHandler = nextApp.getRequestHandler();
 
 const PORT = process.env.PORT || 3000;
 
+//list of broadcasters
 let broadcasters = {};
 
+//twilio id/token for STUN/TURN servers
 const accountSid = 'AC5bf0645d5c285488bb95eaa4734b81ec';
 const authToken = '6f07cbd3b85f1f5ece686e1597c4852c';
 const twilioClient = require('twilio')(accountSid, authToken);
+//STUN/TURN server configs
 const config = {};
 twilioClient.tokens.create().then(token => {
   config.iceServers = token.iceServers;
@@ -26,39 +29,41 @@ const client = jwksClient({
   cache: true,
   cacheMaxEntries: 10,
   rateLimit: true,
+  // for local development on port 3000
   // jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
   jwksUri: `https://raspy-silence-2106.auth0.com/.well-known/jwks.json`
 });
 
-/* STREAMING COMMUNICATION CHANNEL */
+/* STREAMING COMMUNICATION CHANNEL; can have multiple 'channels' in the future for 
+   several 'independent' socket communication spaces
+*/
 const streamio = io.of('/stream');
 
 
-// middleware to verify that the connecting user has a valid JWT
+/* middleware to verify that the connecting user has a valid JWT
+   THIS IS RUN WHENEVER THERE IS A REQUESTING CONNECTION
+*/
 streamio.use((socket, next) => {
   let handshakeData = socket.request;
+  //check if cookie exists
   if (handshakeData && handshakeData.headers.cookie) {
     let cookie = handshakeData.headers.cookie;
-    console.log(cookie);
-
     let hasToken = cookie.lastIndexOf('jwtToken=');
-    
     //if no token, prevent connection
     if(hasToken == -1) {
       next(new Error('not authorized'));
     }
-
     // index starts inclusive of string 'jwtToken='; +9 chars for start of token
     let index_beg = hasToken + 9;
-
     // ending index of token
     let index_end = cookie.indexOf(';', index_beg);
-
+    //extract the token
     let jwtToken = cookie.substring(index_beg, index_end);
-    console.log("JWT TOKEN: " + jwtToken);
+    //decode the token and get the key id
     let decodedToken = jwt.decode(jwtToken, { complete: true });
     let kid = decodedToken.header.kid;
     let signingKey;
+    //get the public key from the specified key id and verify the JWT
     client.getSigningKey(kid, (err, key) => {
       signingKey = key.getPublicKey();
       console.log("SIGNING KEY: " + signingKey);
@@ -74,82 +79,85 @@ streamio.use((socket, next) => {
   }
 });
 
-
+//Socket signalling logic; when a client connects
 streamio.on('connection', socket => {
+  //broadcaster connected
   socket.on('broadcaster', (recipe, name) =>{
       let broadcaster = socket.id;
+      //keep track of broadcaster
       broadcasters[broadcaster] = [recipe, name];
-      console.log("2) SERVER RECEIVES broadcaster AND BROADCASTS broadcaster");
-      console.log("BROADCASTER SOCKET: " + socket.id);
-      console.log(config);
-      console.log("BROADCASTERS: " + Object.keys(broadcasters));
+      //relay to watcher
       socket.emit('broadcaster', config);
   });
 
+  //watcher connected
   socket.on('watcher', () =>{
-    console.log("4) SERVER RECEIVES watcher AND EMITS stream_choice");
-    console.log("WATCHER SOCKET: " + socket.id);
+    //respond back with list of broadcasters
     socket.emit('stream_choice', broadcasters);
   });
 
+  //watcher chooses broadcaster
   socket.on('stream_chosen', (broadcaster) => {
-    console.log("7) SERVER RECEIVES REQUEST FOR CHOSEN STREAM, EMITS watcher");
+    //notify the chosen broadcaster with the watcher's socket id, and add server configuration.
     if(broadcaster in broadcasters){
       socket.to(broadcaster).emit('watcher', socket.id, config);
     }
   });
 
+  //broadcaster extends an offer
   socket.on('offer', (id, message) => {
-    console.log("10) SERVER RECEIVES offer AND EMITS offer");
+    //relay the offer to the specified watcher with the broadcaster's socket id, connection description info, and server config.
     socket.to(id).emit('offer', socket.id, message, config);
   });
 
+  //watcher answers
   socket.on('answer', (id, message) => {
-    console.log("12) SERVER RECEIVES answer AND EMITS answer");
+    //relay the answer to the specified broadcaster, with the watcher's socket id and connection description
     socket.to(id).emit('answer', socket.id, message);
   });
 
+  //relay ICE candidate to specified peer
   socket.on('candidate', (id, message) => {
     socket.to(id).emit('candidate', socket.id, message);
   });
 
+  //watcher sends signal for stream pop-up message
   socket.on('stream_popup', (id, message) => {
-    console.log("SERVER EMITS stream_popup");
+    //relay signal to specified broadcaster with message
     socket.to(id).emit('stream_popup', message);
   });
 
+  //broadcaster sends recipe info for the stream
   socket.on('recipe_data', (id, data) => {
-    console.log("SERVER EMITS recipe_data");
+    //relay to specified watcher with data
     socket.to(id).emit('recipe_data', data);
   });
 
+  //broadcaster sends message synthesize signal
   socket.on('message_synth', (message) => {
-    console.log("SERVER RECEIVES message_synth");
+    //relay to specified watcher with message
     socket.broadcast.emit('message_synth', socket.id, message);
   });
 
+  //broadcaster sends updated stream data
   socket.on('stream_data', (watchers, viewCount) => {
-    console.log("SERVER RECEIVES stream_data");
+     //relay to each watcher specified
      watchers.forEach( (watcher) => {
-      console.log(watcher);
       socket.to(watcher).emit('stream_data', viewCount);
     });
   });
 
+  //socket close
   socket.on('disconnect', () => {
-    console.log("SERVER RECEIVED DISCONNECT: " + socket.id);
-    console.log("BROADCASTERS BEFORE DISCONNECT: " + Object.keys(broadcasters));
-    console.log("BROADCASTER TO DELETE: " + socket.id);
+    //if it is a broadcaster, delete from list of broadcasters
     if (socket.id in broadcasters){
-      console.log("BROADCASTER DELETED");
       delete broadcasters[socket.id];
     }
-    console.log("BROADCASTERS AFTER DISCONNECT: " + Object.keys(broadcasters));
+    //relay information of disconnection
     socket.broadcast.emit('dc', socket.id);
     
   });
 });
-
 
 nextApp.prepare().then(() => {
   app.get('*', (req, res) => {

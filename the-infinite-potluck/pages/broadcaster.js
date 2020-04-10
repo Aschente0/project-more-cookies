@@ -5,10 +5,13 @@ import secureTemplate from '../static/secure-template';
 
 class Broadcaster extends Component {
     componentDidMount(){
+        //the canvas to edit the video stream
         let canvasComp = document.getElementById('canvas');
         this.socket=io('/stream');
         let recipe;
+        //the dom element that holds the recipe steps
         let steps = document.getElementById('steps');
+        //get the recipe that is stored in local storage from the previous step and populate the recipe component in dom
         if(localStorage.getItem('data')) {
             recipe = JSON.parse(localStorage.getItem('data'));
             document.getElementById('title').innerHTML = `${this.props.loggedInUser.nickname}'s ${recipe.title}`;
@@ -22,17 +25,21 @@ class Broadcaster extends Component {
                 `;
             });
         }
-
+        // the list of peer connections for this broadcast
         const peerConnections = {};
         let peerCount = 0;
+        //dom element for number of viewers
         document.getElementById('stream_count').innerHTML = `${peerCount}`;
-        // const video = document.getElementById('video');
+
         const canvas = document.getElementById('canvas').getContext('2d');
         const video = document.createElement('video');
         video.setAttribute('autoplay', true);
+
+        //stream popup message list
         let messages = [];
         let message = "";
         let pause = false;
+        //speech synthesis api
         let speech = new SpeechSynthesisUtterance();
 
         //video properties
@@ -41,6 +48,7 @@ class Broadcaster extends Component {
         let videoWidth;
         let videoHeight;
 
+        //stream message popup logic
         const drawToCanvas = () => {
             canvas.drawImage(video, 0, 0, videoWidth, videoHeight);
             let font = Math.floor(videoWidth/30);
@@ -52,7 +60,6 @@ class Broadcaster extends Component {
                 message = messages.shift();
                 //emit signal with message for watches to synthesize text
                 this.socket.emit('message_synth', message);
-                console.log("BROADCASTER EMITS message_synth");
                 //ready the local text synthesis for broadcaster to hear
                 speech.text = message;
                 window.speechSynthesis.speak(speech);
@@ -77,12 +84,11 @@ class Broadcaster extends Component {
 
         //signal for stream pop-up
         this.socket.on('stream_popup', message => {
-            console.log("BROADCASTER RECEIVED stream_popup");
             messages.push(message);
-            console.log(messages);
         });
 
-        // navigator.mediaDevices.getUserMedia({video: true, audio: true})
+        /* signals to establish peer connection */
+        //get video from webcam, and start setting up video/canvas size with the information
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then((stream) => {
                 //get video info
@@ -90,31 +96,21 @@ class Broadcaster extends Component {
                 const vRatio = (vtrack.width / vtrack.height);
                 height = width / vRatio;
                 //size up canvas and streamPlugin accordingly
-                console.log(width, height);
                 videoWidth = 0.7 * width;
                 videoHeight = 0.7 * height;
                 canvasComp.width = videoWidth;
                 canvasComp.height = videoHeight;
                 steps.style.maxWidth = `${0.3 * width}px`;
                 steps.style.height = `${videoHeight}px`;
-                console.log("HERE: " + steps.style.maxWidth, steps.style.maxHeight);
                 video.srcObject = stream;
                 drawToCanvas();
-                console.log("1) BROADCASTER EMITS broadcaster");
-                console.log(this.props);
                 this.socket.emit('broadcaster', recipe, this.props.loggedInUser.nickname);
             })
             .catch(function (err) {
                 console.log(err);
             });
 
-        this.socket.on('answer', function (id, description){
-            console.log("13) BROADCASTER RECEIVES answer, SETS RD");
-            peerConnections[id].setRemoteDescription(description);
-        });
-
         this.socket.on('watcher', (id, config) => {
-            console.log("8) BROADCASTER RECEIVES watcher");
             const peerConnection = new RTCPeerConnection(config);
             peerConnections[id] = peerConnection;
             peerCount++;
@@ -125,41 +121,39 @@ class Broadcaster extends Component {
             navigator.mediaDevices.getUserMedia({audio: true, video: false})
                 .then(aStream => {
                     aStream.getAudioTracks().forEach( (track) => {
-                        console.log("combining audio track");
                         stream.addTrack(track);
 
                         stream.getTracks().forEach(track => {
-                            console.log("ADDING TRACK: " + track);
                             peerConnection.addTrack(track, stream);
                         });
                         peerConnection.createOffer()
                         .then(sdp => peerConnection.setLocalDescription(sdp))
                         .then( () => {
-                            console.log("9) BROADCASTER EMITS offer")
                             this.socket.emit('offer', id, peerConnection.localDescription);
                             // send over initial recipe of the stream
                             this.socket.emit('recipe_data', id, recipe);
                         });
                         peerConnection.onicecandidate = iceEvent => {
                             if (iceEvent.candidate) {
-                                console.log("CANDIDATE EMIT FROM BROADCASTER: " + iceEvent.candidate);
                                 this.socket.emit('candidate', id, iceEvent.candidate);
                             }
                         };
                     });
                 });
             //Here, we can send over viewer data of the stream; updates every time a watcher connnects
-            console.log("PEER CONNECTIONS: " + Object.keys(peerConnections));
             this.socket.emit('stream_data', Object.keys(peerConnections), peerCount);
         });
 
+        this.socket.on('answer', function (id, description){
+            peerConnections[id].setRemoteDescription(description);
+        });
+
         this.socket.on('candidate', (id, candidate) => {
-            console.log("CANDIDATE RECEIVED IN BROADCASTER: " + candidate);
             peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
         });
 
+        //signal from watcher disconnecting
         this.socket.on('dc', id => {
-            console.log("BROADCASTER RECEIVED DISCONNECT");
             if(peerConnections[id]){
                 peerConnections[id].close();
                 delete peerConnections[id];
@@ -169,8 +163,8 @@ class Broadcaster extends Component {
             }
         });
 
+        //logic for leaving/disconnecting
         Router.beforePopState(({url, as, options}) => {
-            console.log("ATTEMPTING TO DISCONNECT AS BROADCASTER");
             // clear recipe data
             if(localStorage.getItem('data')) {
                 localStorage.removeItem('data');

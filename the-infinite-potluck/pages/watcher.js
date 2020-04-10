@@ -8,6 +8,7 @@ class Watcher extends Component {
         super(props);
     }
 
+    //function to toggle elements upon navigation of recipes
     toggle(){
         let video = document.getElementById('video');
         let steps = document.getElementById('steps');
@@ -57,24 +58,20 @@ class Watcher extends Component {
         messageBox.addEventListener("click", event => {
             let message = data.value;
             msg.reset();
-            console.log(message);
             //params: signal, broadcast id to emit to, message
             this.socket.emit('stream_popup', currBroadcast, message);
-            console.log("WATCHER EMITS stream_popup");
         });
 
-        //signal to synthesis message
+        //signal to synthesize message
         this.socket.on('message_synth', (id, message) => {
-            console.log("WATCHER RECEIVES message_synth");
-            console.log("ID: " + id + " currBroadcast: " + currBroadcast);
             if (id == currBroadcast) {
                 speech.text = message;
                 window.speechSynthesis.speak(speech);
             }
         });
 
+        //offer from broadcaster
         this.socket.on('offer', (id, message, config) => {
-            console.log("11) WATCHER RECEIVES offer");
             peerConnection = new RTCPeerConnection(config);
             peerConnection.setRemoteDescription(message)
                 .then(() => peerConnection.createAnswer())
@@ -84,7 +81,6 @@ class Watcher extends Component {
                     this.socket.emit('answer', id, peerConnection.localDescription);
                 });
             peerConnection.ontrack = function(event) {
-                // console.log("MOUNT VIDEO, STREAMS: " + event.streams[0] + " ACTIVE: " + event.streams[0].active);
                 video.srcObject = event.streams[0];
                 console.log(video.videoHeight, video.videoWidth);
             };
@@ -106,29 +102,23 @@ class Watcher extends Component {
                 video.height = videoHeight;
                 steps.style.maxWidth = `${0.3 * width}px`;
                 steps.style.height = `${videoHeight}px`;
-                console.log(video.width, video.height);
             }
             
         };
 
-
-        this.socket.on('connect', () => {
-            console.log("watcher connected");
-            this.socket.emit('watcher');
-        });
+        // this.socket.on('connect', () => {
+        //     this.socket.emit('watcher');
+        // });
         
         this.socket.on('broadcaster', () => {
-            console.log("3) WATCHER RECEIVES broadcaster AND EMITS watcher");
             this.socket.emit('watcher');
         });
 
+        //server offers choices of streams
         this.socket.on('stream_choice', (broadcasters) => {
-            console.log("5) WATCHER CHOOSING STREAM");
-            console.log(Object.keys(broadcasters));
-
+            //display onto dom
             let pickstream = document.getElementById('pickstream');
             Object.keys(broadcasters).forEach( (broadcast) => {
-                console.log("BROADCASTER: " + broadcast);
                 let recipe = broadcasters[broadcast][0];
                 let streamer = broadcasters[broadcast][1];
                 pickstream.innerHTML = pickstream.innerHTML + `
@@ -144,12 +134,11 @@ class Watcher extends Component {
                 `;
 
             });
-
+            //add event listeners to choices in dom
             Object.keys(broadcasters).forEach((broadcast) => {
                 document.getElementById(broadcast).addEventListener("click", () => {
                     //toggle UI elements
                     this.toggle();
-                    console.log("6) WATCHER HAS CHOSEN A STREAM");
                     currBroadcast = broadcast;
                     this.socket.emit('stream_chosen', broadcast);
                     //set the name of the stream to chosen broadcaster's stream
@@ -168,8 +157,6 @@ class Watcher extends Component {
         });
 
         this.socket.on('recipe_data', (data) => {
-            console.log("WATCHER RECEIVES recipe_data");
-            console.log("DATA: " + data.title);
             let instructions = data.analyzedInstructions[0].steps;
             instructions.forEach(instruction => {
                 steps.innerHTML = steps.innerHTML + `
@@ -183,13 +170,11 @@ class Watcher extends Component {
         });
 
         this.socket.on('stream_data', (viewCount) => {
-            console.log("WATCHER RECEIVES stream_data");
-            console.log(viewCount);
             document.getElementById('stream_count').innerHTML = `${viewCount}`;
         });
 
+        //signal from broadcaster disconnecting
         this.socket.on('dc', (broadcast) => {
-            console.log("WATCHER RECEIVED DISCONNECT");
             let doc = document.getElementById(broadcast);
             if (doc){
                 doc.parentNode.removeChild(doc);
@@ -200,8 +185,8 @@ class Watcher extends Component {
             
         });
 
+        //logic for leaving/disconnecting
         Router.beforePopState(({url, as, options}) => {
-            console.log("ATTEMPTING TO DISCONNECT AS WATCHER");
             if(as !== "/" || as !== "/other") {
                 window.location.href = as;
                 return false;
