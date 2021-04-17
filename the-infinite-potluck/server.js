@@ -14,7 +14,7 @@ let broadcasters = {};
 
 //twilio id/token for STUN/TURN servers
 const accountSid = 'AC5bf0645d5c285488bb95eaa4734b81ec';
-const authToken = '6f07cbd3b85f1f5ece686e1597c4852c';
+const authToken = 'c26b3c993712a8f255dbca415543cea1';
 const twilioClient = require('twilio')(accountSid, authToken);
 //STUN/TURN server configs
 const config = {};
