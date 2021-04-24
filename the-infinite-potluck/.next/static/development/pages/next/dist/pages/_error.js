@@ -3672,16 +3672,16 @@ var styles = {
 
 /***/ "./node_modules/react/index.js":
 /*!*******************************************************************************************!*\
-  !*** delegated ./node_modules/react/index.js from dll-reference dll_493c66b1beb5bc1bd29d ***!
+  !*** delegated ./node_modules/react/index.js from dll-reference dll_a6c9c8da919cbc78b1ba ***!
   \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(/*! dll-reference dll_493c66b1beb5bc1bd29d */ "dll-reference dll_493c66b1beb5bc1bd29d"))("./node_modules/react/index.js");
+module.exports = (__webpack_require__(/*! dll-reference dll_a6c9c8da919cbc78b1ba */ "dll-reference dll_a6c9c8da919cbc78b1ba"))("./node_modules/react/index.js");
 
 /***/ }),
 
-/***/ 4:
+/***/ 6:
 /*!********************************************************************************************************************************************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2Fnext%2Fdist%2Fpages%2F_error&absolutePagePath=C%3A%5CUsers%5Ccarlo_fqwuyel%5CDesktop%5CUofT%5CCSCC09%5Cproject%5Cproject-project-more-cookies%5Cthe-infinite-potluck%5Cnode_modules%5Cnext%5Cdist%5Cpages%5C_error.js ***!
   \********************************************************************************************************************************************************************************************************************************************************************/
@@ -3693,16 +3693,16 @@ module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2Fnext%2
 
 /***/ }),
 
-/***/ "dll-reference dll_493c66b1beb5bc1bd29d":
+/***/ "dll-reference dll_a6c9c8da919cbc78b1ba":
 /*!*******************************************!*\
-  !*** external "dll_493c66b1beb5bc1bd29d" ***!
+  !*** external "dll_a6c9c8da919cbc78b1ba" ***!
   \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = dll_493c66b1beb5bc1bd29d;
+module.exports = dll_a6c9c8da919cbc78b1ba;
 
 /***/ })
 
-},[[4,"static/runtime/webpack.js"]]]);
+},[[6,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=_error.js.map

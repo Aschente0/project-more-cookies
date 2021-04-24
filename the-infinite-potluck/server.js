@@ -1,3 +1,6 @@
+import { accountSid, authToken } from './serverKeys.js';
+
+
 const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -13,8 +16,6 @@ const PORT = process.env.PORT || 3000;
 let broadcasters = {};
 
 //twilio id/token for STUN/TURN servers
-const accountSid = 'AC5bf0645d5c285488bb95eaa4734b81ec';
-const authToken = '6f07cbd3b85f1f5ece686e1597c4852c';
 const twilioClient = require('twilio')(accountSid, authToken);
 //STUN/TURN server configs
 const config = {};
@@ -30,7 +31,6 @@ const client = jwksClient({
   cacheMaxEntries: 10,
   rateLimit: true,
   // for local development on port 3000
-  // jwksUri: `https://dev-572t65wb.auth0.com/.well-known/jwks.json`
   jwksUri: `https://raspy-silence-2106.auth0.com/.well-known/jwks.json`
 });
 

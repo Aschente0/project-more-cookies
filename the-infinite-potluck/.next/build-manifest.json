@@ -1,7 +1,7 @@
 {
   "devFiles": [
-    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js",
-    "static/development/dll/dll_4fdf63b5905f8fb2acf2.js.map"
+    "static/development/dll/dll_6aec555d05d5685ef0e3.js",
+    "static/development/dll/dll_6aec555d05d5685ef0e3.js.map"
   ],
   "pages": {
     "/": [
@@ -21,11 +21,11 @@
       "static/runtime/polyfills.js",
       "static/runtime/polyfills.js.map"
     ],
-    "/auth/callback": [
+    "/broadcaster": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/broadcaster": [
+    "/credits": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
