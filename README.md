@@ -25,7 +25,7 @@ WebRTC for p2p live streaming
 
 Socket.io for signaling
 
-Twilio's services for STUN/TURN servers to guarantee peer connections
+STUN/TURN servers via Twilio to guarantee peer connections
 
 Heroku for deployment
 
