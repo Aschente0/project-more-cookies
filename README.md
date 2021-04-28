@@ -13,7 +13,7 @@ The first is a broadcasting functionality; a user would begin by searching for r
 The second is a watching functionality; a user who intends to watch a stream will begin by selecting a stream from a list of streams available. Choosing one allows the user to watch the stream, as well as communicate to the streamer and other viewers through a message component. The message component is not displayed in a chat, but rather shows up on the video stream as a text message displayed on the top-left corner of the stream. The message is also synthesized into speech, allowing both the streamers and the viewers to hear the message. 
 
 ## Technologies Used:
-Node.js back-end
+Node.js
 
 Next.js React framework for front-end
 
